@@ -3,14 +3,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 export default function Tasks() {
-  interface TodoItem {
+  interface Task {
     id: string;
     name: string;
     points: number;
     completed: boolean;
   }
 
-  const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -20,7 +20,7 @@ export default function Tasks() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setTodoItems(data);
+        setTasks(data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
@@ -36,9 +36,9 @@ export default function Tasks() {
       });
 
       if (response.ok) {
-        setTodoItems((prevItems) =>
-          prevItems.map((item) =>
-            item.id === id ? { ...item, completed: true } : item
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === id ? { ...task, completed: true } : task
           )
         );
       } else {
@@ -56,9 +56,9 @@ export default function Tasks() {
       });
 
       if (response.ok) {
-        setTodoItems((prevItems) =>
-          prevItems.map((item) =>
-            item.id === id ? { ...item, completed: false } : item
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === id ? { ...task, completed: false } : task
           )
         );
       } else {
@@ -72,11 +72,11 @@ export default function Tasks() {
   return (
     <View style={styles.container}>
       <SwipeListView
-        data={todoItems.sort((a, b) => Number(a.completed) - Number(b.completed))}
-        keyExtractor={(item) => item.id}
+        data={tasks.sort((a, b) => Number(a.completed) - Number(b.completed))}
+        keyExtractor={(task) => task.id}
         renderItem={({ item }) => (
           <View style={styles.rowFront}>
-            <Text style={[styles.item, item.completed && styles.completedItem]}>
+            <Text style={[styles.task, item.completed && styles.completedTask]}>
               {item.name} - {item.points} points
             </Text>
           </View>
@@ -116,10 +116,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  item: {
+  task: {
     fontSize: 18,
   },
-  completedItem: {
+  completedTask: {
     textDecorationLine: 'line-through',
     color: 'green',
   },
