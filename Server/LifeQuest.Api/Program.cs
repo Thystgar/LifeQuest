@@ -11,7 +11,8 @@ namespace LifeQuest.Api
          // Add services to the container.
 
          builder.Services.AddControllers();
-         builder.Services.AddSingleton<LifeGamificationProcessor>();
+         builder.Services.AddSingleton<RewardProcessor>();
+         builder.Services.AddSingleton<TaskProcessor>();
 
          // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
          builder.Services.AddEndpointsApiExplorer();

@@ -14,4 +14,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\FrontEnd\" />
+    <Folder Include="Models\BackEnd\" />
+    <Folder Include="Models\Middle\" />
+  </ItemGroup>
+
 </Project>

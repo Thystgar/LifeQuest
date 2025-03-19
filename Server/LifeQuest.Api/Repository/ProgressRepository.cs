@@ -3,7 +3,7 @@ namespace LifeQuest.Api.Repository
     using System;
     using System.Threading.Tasks;
     using Azure.Storage.Blobs;
-    using LifeQuest.Api.Models;
+    using Models;
 
     public class ProgressRepository
     {

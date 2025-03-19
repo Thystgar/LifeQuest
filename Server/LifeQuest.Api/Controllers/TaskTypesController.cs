@@ -8,12 +8,12 @@ namespace LifeQuest.Api.Controllers
     [Route("[controller]")]
     public class TaskTypesController : ControllerBase
     {
-        private readonly LifeGamificationProcessor processor;
+        private readonly TaskProcessor processor;
 
         private readonly ILogger<TaskTypesController> logger;
 
         public TaskTypesController(
-            LifeGamificationProcessor processor,
+            TaskProcessor processor,
             ILogger<TaskTypesController> logger)
         {
             this.processor = processor;

@@ -8,12 +8,11 @@ namespace LifeQuest.Api.Controllers
     [Route("[controller]")]
     public class ProgressController : ControllerBase
     {
-        private readonly LifeGamificationProcessor processor;
-
+        private readonly RewardProcessor processor;
         private readonly ILogger<ProgressController> logger;
 
         public ProgressController(
-            LifeGamificationProcessor processor,
+            RewardProcessor processor,
             ILogger<ProgressController> logger)
         {
             this.processor = processor;

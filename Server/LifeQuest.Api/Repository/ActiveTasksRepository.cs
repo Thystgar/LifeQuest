@@ -4,7 +4,7 @@ namespace LifeQuest.Api.Repository
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Azure.Storage.Blobs;
-    using LifeQuest.Api.Models;
+    using Models;
     using Azure.Identity;
 
     public class ActiveTasksRepository
