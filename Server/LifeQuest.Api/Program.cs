@@ -1,4 +1,6 @@
 using LifeQuest.Api.Processors;
+using LifeQuest.Api.Storage;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeQuest.Api
 {
@@ -9,9 +11,10 @@ namespace LifeQuest.Api
          var builder = WebApplication.CreateBuilder();
 
          // Add services to the container.
-
          builder.Services.AddControllers();
-         builder.Services.AddSingleton<LifeGamificationProcessor>();
+         builder.Services.AddDbContext<LifeQuestContext>(options => options.UseSqlServer(@"Server=localhost; Database=LifeQest; User=sa; Password=P@ssw0rd!;"));
+         builder.Services.AddSingleton<RewardProcessor>();
+         builder.Services.AddSingleton<TaskProcessor>();
 
          // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
          builder.Services.AddEndpointsApiExplorer();

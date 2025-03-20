@@ -1,7 +1,7 @@
 namespace LifeQuest.Api.Repository
 {
     using Azure.Storage.Blobs;
-    using LifeQuest.Api.Models;
+    using Models;
 
     public class TaskTypesRepository
     {
