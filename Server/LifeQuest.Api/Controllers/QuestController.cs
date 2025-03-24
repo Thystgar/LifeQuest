@@ -1,5 +1,5 @@
-using LifeQuest.Api.Models;
-using LifeQuest.Api.Processors;
+using LifeQuest.Api.Models.API;
+using LifeQuest.Api.Models.Storage;
 using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,21 +10,18 @@ namespace LifeQuest.Api.Controllers
     public class QuestController : ControllerBase
     {
         private readonly LifeQuestContext _context;
-
         private readonly ILogger<QuestController> _logger;
    
-
-        public QuestController(LifeQuestContext context,
-            ILogger<QuestController> logger)
+        public QuestController(LifeQuestContext context, ILogger<QuestController> logger)
         {
             _context = context;
-            this._logger = logger;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Quest>> GetQuestsAsync(string name)
+        public async Task<IEnumerable<QuestApiModel>> GetQuestsAsync(string name)
         {
-
+            throw new NotImplementedException();
         }
 
 

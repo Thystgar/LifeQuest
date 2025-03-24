@@ -2,7 +2,7 @@
 {
     public class AccountStorageModel
     {
-        public string Name { get; set; }
-        public int Points { get; set; }
+        public required string Name { get; set; }
+        public required int Points { get; set; }
     }
 }

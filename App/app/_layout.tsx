@@ -2,25 +2,24 @@ import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Tasks from './tabs/tasks';
+import Quests from './tabs/quests';
 import Rewards from './tabs/rewards';
 import Settings from './tabs/settings';
-import Header from './header';
+import Account from './tabs/account';
 
 const Tab = createBottomTabNavigator();
 
 export default function RootLayout() {
   return (
     <View style={styles.container}>
-      <Header />
       <Tab.Navigator>
         <Tab.Screen 
-          name="Tasks" 
-          component={Tasks} 
+          name="Quests" 
+          component={Quests} 
           options={{
             tabBarIcon: ({ color, size }) => (
               <Image
-                source={require('../assets/images/tasks.png')}
+                source={require('../assets/images/quests.png')}
                 style={{ width: size, height: size, tintColor: color }}
               />
             ),
@@ -45,6 +44,18 @@ export default function RootLayout() {
             tabBarIcon: ({ color, size }) => (
               <Image
                 source={require('../assets/images/settings.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen 
+          name="Account" 
+          component={Account} 
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('../assets/images/account.png')}
                 style={{ width: size, height: size, tintColor: color }}
               />
             ),

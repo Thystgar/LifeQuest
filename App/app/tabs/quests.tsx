@@ -2,81 +2,81 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-export default function Tasks() {
-  interface Task {
+export default function Quests() {
+  interface Quest {
     id: string;
     name: string;
     points: number;
     completed: boolean;
   }
 
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [quests, setQuests] = useState<Quest[]>([]);
 
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchQuests = async () => {
       try {
-        const response = await fetch('http://10.0.2.2:8080/tasks');
+        const response = await fetch('http://10.0.2.2:8080/quests');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setTasks(data);
+        setQuests(data);
       } catch (error) {
-        console.error('Error fetching tasks:', error);
+        console.error('Error fetching quests:', error);
       }
     };
 
-    fetchTasks();
+    fetchQuests();
   }, []);
 
-  const handleTaskSwipe = async (id: string) => {
+  const handleQuestSwipe = async (id: string) => {
     try {
-      const response = await fetch(`http://10.0.2.2:8080/tasks/finish?id=${id}`, {
+      const response = await fetch(`http://10.0.2.2:8080/quests/finish?id=${id}`, {
         method: 'POST',
       });
 
       if (response.ok) {
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === id ? { ...task, completed: true } : task
+        setQuests((prevQuests) =>
+          prevQuests.map((quest) =>
+            quest.id === id ? { ...quest, completed: true } : quest
           )
         );
       } else {
-        console.error('Failed to complete task');
+        console.error('Failed to complete quest');
       }
     } catch (error) {
-      console.error('Error completing task:', error);
+      console.error('Error completing quest:', error);
     }
   };
 
-  const handleTaskReactivate = async (id: string) => {
+  const handleQuestReactivate = async (id: string) => {
     try {
-      const response = await fetch(`http://10.0.2.2:8080/tasks/reactivate?id=${id}`, {
+      const response = await fetch(`http://10.0.2.2:8080/quests/reactivate?id=${id}`, {
         method: 'POST',
       });
 
       if (response.ok) {
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === id ? { ...task, completed: false } : task
+        setQuests((prevQuests) =>
+          prevQuests.map((quest) =>
+            quest.id === id ? { ...quest, completed: false } : quest
           )
         );
       } else {
-        console.error('Failed to reactivate task');
+        console.error('Failed to reactivate quest');
       }
     } catch (error) {
-      console.error('Error reactivating task:', error);
+      console.error('Error reactivating quest:', error);
     }
   };
 
   return (
     <View style={styles.container}>
       <SwipeListView
-        data={tasks.sort((a, b) => Number(a.completed) - Number(b.completed))}
-        keyExtractor={(task) => task.id}
+        data={quests.sort((a, b) => Number(a.completed) - Number(b.completed))}
+        keyExtractor={(quest) => quest.id}
         renderItem={({ item }) => (
           <View style={styles.rowFront}>
-            <Text style={[styles.task, item.completed && styles.completedTask]}>
+            <Text style={[styles.quest, item.completed && styles.completedQuest]}>
               {item.name} - {item.points} points
             </Text>
           </View>
@@ -91,9 +91,9 @@ export default function Tasks() {
         rightOpenValue={-75}
         onRowOpen={(rowKey, rowMap, toValue) => {
           if (toValue > 0) {
-            handleTaskSwipe(rowKey);
+            handleQuestSwipe(rowKey);
           } else {
-            handleTaskReactivate(rowKey);
+            handleQuestReactivate(rowKey);
           }
           rowMap[rowKey].closeRow();
         }}
@@ -116,10 +116,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  task: {
+  quest: {
     fontSize: 18,
   },
-  completedTask: {
+  completedQuest: {
     textDecorationLine: 'line-through',
     color: 'green',
   },

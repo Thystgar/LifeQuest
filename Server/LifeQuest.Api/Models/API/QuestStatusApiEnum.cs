@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace LifeQuest.Api.Models.Storage
+namespace LifeQuest.Api.Models.API
 {
-	public enum QuestStatusStorage
-	{
+    public enum QuestStatusApiEnum
+    {
         [EnumMember(Value = "Accepted")] Accepted,
         [EnumMember(Value = "Active")] Active,
         [EnumMember(Value = "Completed")] Completed

@@ -24,7 +24,7 @@ Before you begin, ensure you have met the following requirements:
 ## App
 
 ### Run locally
-Go to folder App/life-quest-app and run
+Go to folder App and run
 	```sh
 	npm run android
 	```
