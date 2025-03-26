@@ -1,5 +1,4 @@
 using LifeQuest.Api.Models.API;
-using LifeQuest.Api.Models.Storage;
 using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore.Mvc;
 

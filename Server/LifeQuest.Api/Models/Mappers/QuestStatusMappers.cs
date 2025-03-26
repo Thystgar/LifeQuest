@@ -1,4 +1,3 @@
-using System;
 using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Models.Storage;
 

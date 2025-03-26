@@ -1,17 +1,27 @@
 ﻿using LifeQuest.Api.Models.API;
+using LifeQuest.Api.Models.Mappers;
+using LifeQuest.Api.Storage;
 
 namespace LifeQuest.Api.Processors
 {
     public class RewardProcessor
     {
-        public async Task<IEnumerable<RewardApiModel>> GetRewardsAsync(string user)
+        private readonly ILifeQuestStorage _storage;
+        public RewardProcessor(ILifeQuestStorage lifeQuestStorage)
         {
-            throw new NotImplementedException();
+            _storage = lifeQuestStorage;
         }
 
-        public async Task AddRewardAsync(string user, RewardApiModel reward)
+        public async Task<IEnumerable<RewardApiModel>> GetRewardsAsync()
         {
-            throw new NotImplementedException();
+            var rewards = await _storage.GetRewardsAsync();
+            return rewards.Select(r => r.ToApiModel());
+        }
+
+        public async Task AddRewardAsync(RewardApiModel reward)
+        {
+            var storageReward = reward.ToStorageModel();
+            await _storage.AddRewardAsync(storageReward);
         }
     }
 }
