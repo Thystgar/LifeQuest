@@ -31,6 +31,31 @@ Go to folder App and run
 
 ## Server
 
+### Setup DB migrations
+[Install EF tools](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
+[Create and apply migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
+	```sh
+    dotnet tool install --global dotnet-ef
+    cd C:/LifeQuest/Server
+    dotnet add package Microsoft.EntityFrameworkCore.Design
+	```
+
+Create migration
+	```sh
+    dotnet ef migrations add InitialCreate
+	```
+
+Apply migration
+	```sh
+    dotnet ef database update
+	```
+
+### Connect to db
+#### Connect to local db 
+Data Source=127.0.0.1;Initial Catalog=life-quest-db;User ID=sa;Password=P@ssw0rd!;Encrypt=False;Trust Server Certificate=True
+#### Connect to azure db 
+Add your IP to have access to [Azure SQL Server](https://portal.azure.com/#@janamediceseznam.onmicrosoft.com/resource/subscriptions/dc82971a-f484-4c22-bb31-c36b9805a147/resourceGroups/life-quest/providers/Microsoft.Sql/servers/life-quest-db-server/networking). In the networking panel under firewall rules add your client IPv4 address and save.
+
 ### Run locally
 
 ## CI/CD

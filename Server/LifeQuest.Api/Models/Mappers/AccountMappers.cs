@@ -9,6 +9,7 @@ namespace LifeQuest.Api.Models.Mappers
         {
             return new AccountApiModel
             {
+                Id = storageModel.Id,
                 Name = storageModel.Name,
                 Points = storageModel.Points
             };
@@ -18,6 +19,7 @@ namespace LifeQuest.Api.Models.Mappers
         {
             return new AccountStorageModel
             {
+                Id = apiModel.Id,
                 Name = apiModel.Name,
                 Points = apiModel.Points
             };
