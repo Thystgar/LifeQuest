@@ -56,6 +56,8 @@ Data Source=127.0.0.1;Initial Catalog=life-quest-db;User ID=sa;Password=P@ssw0rd
 #### Connect to azure db 
 Add your IP to have access to [Azure SQL Server](https://portal.azure.com/#@janamediceseznam.onmicrosoft.com/resource/subscriptions/dc82971a-f484-4c22-bb31-c36b9805a147/resourceGroups/life-quest/providers/Microsoft.Sql/servers/life-quest-db-server/networking). In the networking panel under firewall rules add your client IPv4 address and save.
 
+In order to be able to quesry the database when connecting from localhost you need to log in to your Visual Stidio with Microsoft account and enable the account on the database in [Azure Portal](https://portal.azure.com/#@janamediceseznam.onmicrosoft.com/resource/subscriptions/dc82971a-f484-4c22-bb31-c36b9805a147/resourceGroups/life-quest/providers/Microsoft.Sql/servers/life-quest-db-server/databases/life-quest-db/queryEditor) using command CREATE USER [user-email] FROM EXTERNAL PROVIDER;
+
 ### Run locally
 
 ## CI/CD
