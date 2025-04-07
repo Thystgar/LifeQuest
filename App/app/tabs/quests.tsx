@@ -53,7 +53,7 @@ export default function Quests() {
         renderItem={({ item }) => (
           <View style={styles.rowFront}>
             <Text style={[styles.quest, item.status == QuestStatus.Completed && styles.completedQuest]}>
-              {item.name} - {item.points} points
+              {item.name} - {item.value} points
             </Text>
           </View>
         )}

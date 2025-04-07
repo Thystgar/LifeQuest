@@ -85,7 +85,7 @@ export default function Rewards() {
     resetModal();
     setRewardId(reward.id);
     setRewardName(reward.name);
-    setRewardPoints(reward.points.toString());
+    setRewardPoints(reward.value.toString());
     setModalVisible(true);
   };
 
@@ -107,7 +107,7 @@ export default function Rewards() {
           >
             <View style={styles.rowFront}>
               <Text style={[styles.item, item.redeemed && styles.completedItem]}>
-                {item.name} - {item.points} points
+                {item.name} - {item.value} points
               </Text>
             </View>
           </TouchableHighlight>

@@ -1,7 +1,8 @@
 export interface Quest {
 	id: string;
 	name: string;
-	points: number;
+	description: string;
+	value: number;
 	status: QuestStatus; 
 }
 
@@ -14,7 +15,8 @@ export enum QuestStatus {
 export interface Reward {
 	id: string;
 	name: string;
-	points: number;
+	description: string;
+	value: number;
 	redeemed: boolean;
 }
 
