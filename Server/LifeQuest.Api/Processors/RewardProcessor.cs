@@ -6,10 +6,10 @@ namespace LifeQuest.Api.Processors
 {
     public class RewardProcessor
     {
-        private readonly ILifeQuestStorage _storage;
-        public RewardProcessor(ILifeQuestStorage lifeQuestStorage)
+        private readonly IRewardStorage _storage;
+        public RewardProcessor(IRewardStorage storage)
         {
-            _storage = lifeQuestStorage;
+            _storage = storage;
         }
 
         public async Task<IEnumerable<RewardApiModel>> GetRewardsAsync()
