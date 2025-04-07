@@ -6,9 +6,9 @@ namespace LifeQuest.Api.Processors
 {
     public class QuestProcessor
     {
-        private readonly ILifeQuestStorage _storage;
+        private readonly IQuestStorage _storage;
         private readonly AccountProcessor _account;
-        public QuestProcessor(ILifeQuestStorage storage, AccountProcessor account)
+        public QuestProcessor(IQuestStorage storage, AccountProcessor account)
         {
             _storage = storage;
             _account = account;

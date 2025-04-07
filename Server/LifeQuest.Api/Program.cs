@@ -14,7 +14,12 @@ namespace LifeQuest.Api
 			builder.Services.AddControllers();
 			builder.Services.AddDbContext<LifeQuestContext>( options => options.UseSqlServer( "Data Source=127.0.0.1;Initial Catalog=life-quest-db;User ID=sa;Password=P@ssw0rd!;Encrypt=False;Trust Server Certificate=True" ) );
 			builder.Services.AddScoped<ILifeQuestStorage, LifeQuestDbStorage>();
+			builder.Services.AddScoped<IQuestStorage, QuestDbStorage>();
+			builder.Services.AddScoped<IRewardStorage, RewardDbStorage>();
+			builder.Services.AddScoped<IAccountStorage, AccountDbStorage>();
 			builder.Services.AddScoped<RewardProcessor>();
+			builder.Services.AddScoped<QuestProcessor>();
+			builder.Services.AddScoped<AccountProcessor>();
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
