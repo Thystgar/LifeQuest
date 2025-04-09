@@ -1,83 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { fetchQuests, completeQuest, reactivateQuest } from '../shared/api';
+import { Quest, QuestStatus } from '../shared/types';
 
 export default function Quests() {
-  interface Quest {
-    id: string;
-    name: string;
-    points: number;
-    completed: boolean;
-  }
-
   const [quests, setQuests] = useState<Quest[]>([]);
 
   useEffect(() => {
-    const fetchQuests = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://10.0.2.2:8080/quests');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchQuests();
         setQuests(data);
       } catch (error) {
-        console.error('Error fetching quests:', error);
+        console.error(error);
       }
     };
-
-    fetchQuests();
+    fetchData();
   }, []);
 
   const handleQuestSwipe = async (id: string) => {
     try {
-      const response = await fetch(`http://10.0.2.2:8080/quests/finish?id=${id}`, {
-        method: 'POST',
-      });
-
-      if (response.ok) {
-        setQuests((prevQuests) =>
-          prevQuests.map((quest) =>
-            quest.id === id ? { ...quest, completed: true } : quest
-          )
-        );
-      } else {
-        console.error('Failed to complete quest');
-      }
+      await completeQuest(id);
+      setQuests((prevQuests) =>
+        prevQuests.map((quest) =>
+          quest.id === id ? { ...quest, status: QuestStatus.Completed } : quest
+        )
+      );
     } catch (error) {
-      console.error('Error completing quest:', error);
+      console.error(error);
     }
   };
 
   const handleQuestReactivate = async (id: string) => {
     try {
-      const response = await fetch(`http://10.0.2.2:8080/quests/reactivate?id=${id}`, {
-        method: 'POST',
-      });
-
-      if (response.ok) {
-        setQuests((prevQuests) =>
-          prevQuests.map((quest) =>
-            quest.id === id ? { ...quest, completed: false } : quest
-          )
-        );
-      } else {
-        console.error('Failed to reactivate quest');
-      }
+      await reactivateQuest(id);
+      setQuests((prevQuests) =>
+        prevQuests.map((quest) =>
+          quest.id === id ? { ...quest, status: QuestStatus.Active } : quest
+        )
+      );
     } catch (error) {
-      console.error('Error reactivating quest:', error);
+      console.error(error);
     }
   };
 
   return (
     <View style={styles.container}>
       <SwipeListView
-        data={quests.sort((a, b) => Number(a.completed) - Number(b.completed))}
+        data={quests.sort((a, b) => a.status === QuestStatus.Completed ? 1 : -1)}
         keyExtractor={(quest) => quest.id}
         renderItem={({ item }) => (
           <View style={styles.rowFront}>
-            <Text style={[styles.quest, item.completed && styles.completedQuest]}>
-              {item.name} - {item.points} points
+            <Text style={[styles.quest, item.status == QuestStatus.Completed && styles.completedQuest]}>
+              {item.name} - {item.value} points
             </Text>
           </View>
         )}
