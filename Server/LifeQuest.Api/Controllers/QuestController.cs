@@ -1,5 +1,5 @@
 using LifeQuest.Api.Models.API;
-using LifeQuest.Api.Storage;
+using LifeQuest.Api.Processors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LifeQuest.Api.Controllers
@@ -8,21 +8,29 @@ namespace LifeQuest.Api.Controllers
     [Route("[controller]")]
     public class QuestController : ControllerBase
     {
-        private readonly LifeQuestContext _context;
-        private readonly ILogger<QuestController> _logger;
-   
-        public QuestController(LifeQuestContext context, ILogger<QuestController> logger)
+        private readonly IQuestProcessor _questProcessor;
+        private const string USER = "userIdTBD"; // TODO: Replace with actual user ID retrieval logic
+
+        public QuestController(IQuestProcessor questProcessor)
         {
-            _context = context;
-            _logger = logger;
+            _questProcessor = questProcessor;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<QuestApiModel>> GetQuestsAsync(string name)
+        public async Task<ActionResult<IEnumerable<QuestApiModel>>> GetQuestsAsync()
         {
-            throw new NotImplementedException();
+            var quests = await _questProcessor.GetQuestsAsync();
+
+            return Ok(quests);
         }
 
+        [HttpPut("{questId}/complete")]
+        public async Task<ActionResult<QuestApiModel>> CompleteQuestAsync(string questId)
+        {
+            var quest = await _questProcessor.CompleteQuestAsync(USER, questId);
+
+            return Ok(quest);
+        }
 
     }
 }
