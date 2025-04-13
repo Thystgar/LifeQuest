@@ -4,7 +4,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { fetchQuests, completeQuest, reactivateQuest } from '../shared/api';
 import { Quest, QuestStatus } from '../shared/types';
 
-export default function Quests() {
+export default function QuestsTab() {
   const [quests, setQuests] = useState<Quest[]>([]);
 
   useEffect(() => {

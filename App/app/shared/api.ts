@@ -141,7 +141,7 @@ export const updateReward = async (id: string, name: string, points: string): Pr
     }
 };
 
-export const fetchAccountInfo = async (): Promise<Account> => {
+export const fetchAccount = async (): Promise<Account> => {
     try {
         const response = await fetch(`${BASE_URI}/account`);
         if (!response.ok) {

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { AccountContext } from '../_layout';
 import { fetchRewards, redeemReward, reactivateReward, addReward, deleteReward, updateReward } from '../shared/api';
 import { Reward } from '../shared/types';
 
-export default function Rewards() {
+export default function RewardsTab() {
+  const account = useContext(AccountContext);
 
   const [rewardItems, setRewardItems] = useState<Reward[]>([]);
   const [modalVisible, setModalVisible] = useState(false);

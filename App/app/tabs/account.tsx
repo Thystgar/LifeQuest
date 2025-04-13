@@ -1,33 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { fetchAccountInfo } from '../shared/api';
-import { Account } from '../shared/types';
+import { AccountContext } from '../_layout';
 
-export default function Account() {
-	const [accountInfo, setAccountInfo] = useState<Account>({ name: '', points: 0 });
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const data = await fetchAccountInfo();
-				setAccountInfo(data);
-			} catch (error) {
-				console.error('Error fetching account information:', error);
-			}
-		};
-
-		fetchData();
-	}, []);
+export default function AccountTab() {
+	const account = useContext(AccountContext);
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.listItem}>
 				<Text style={styles.key}>Name</Text>
-				<Text style={styles.value}>{accountInfo.name}</Text>
+				<Text style={styles.value}>{account.name}</Text>
 			</View>
 			<View style={styles.listItem}>
 				<Text style={styles.key}>Points</Text>
-				<Text style={styles.value}>{accountInfo.points} points</Text>
+				<Text style={styles.value}>{account.points} points</Text>
 			</View>
 			<View style={styles.listItem}>
 				<Text style={styles.key}>Group</Text>

@@ -70,6 +70,14 @@ Need to have docker running locally. The command will create an image without th
 	dotnet publish --os linux --arch x64 /t:PublishContainer
 	```
 
+### Push to container registry
+A new lifequest.azurecr.io Azure container registry have been created for storing the container. To push the container from docker to the registry:
+	```sh
+	docker login
+	docker tag life-quest-api lifequest.azurecr.io/life-quest-api #tag the image for upload
+	docker push lifequest.azurecr.io/lifequest-api #upload the image
+	```
+
 ### Run locally
 
 ## CI/CD

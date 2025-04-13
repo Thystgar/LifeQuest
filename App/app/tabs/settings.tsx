@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Settings() {
+export default function SettingsTab() {
   return (
 	<View style={styles.screen}>
 	  <Text>Settings</Text>
