@@ -71,6 +71,12 @@ Need to have docker running locally. The command will create an image without th
 	```
 
 ### Push to container registry
+The image can be uploaded directly to [container registry](https://portal.azure.com/#@janamediceseznam.onmicrosoft.com/resource/subscriptions/dc82971a-f484-4c22-bb31-c36b9805a147/resourceGroups/life-quest/providers/Microsoft.ContainerRegistry/registries/lifequest/overview)
+	```sh
+	dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
+	```
+	
+Uploading might need ```docker login```. It can also be uploaded from docker:
 A new lifequest.azurecr.io Azure container registry have been created for storing the container. To push the container from docker to the registry:
 	```sh
 	docker login

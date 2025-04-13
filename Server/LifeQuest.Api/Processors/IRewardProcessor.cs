@@ -6,5 +6,7 @@ namespace LifeQuest.Api.Processors
     {
         Task<IEnumerable<RewardApiModel>> GetRewardsAsync();
         Task AddRewardAsync(RewardApiModel reward);
+        Task<RewardApiModel> RedeemRewardAsync(string userId, string rewardId);
+        Task DeleteRewardAsync(string rewardId);
     }
 }

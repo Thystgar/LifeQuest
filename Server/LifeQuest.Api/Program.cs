@@ -11,35 +11,46 @@ namespace LifeQuest.Api
 			var builder = WebApplication.CreateBuilder();
 
 			// Add services to the container.
-			builder.Services.AddControllers();
-			builder.Services.AddDbContext<LifeQuestContext>( options => options.UseSqlServer( "Data Source=127.0.0.1;Initial Catalog=life-quest-db;User ID=sa;Password=P@ssw0rd!;Encrypt=False;Trust Server Certificate=True" ) );
-			builder.Services.AddScoped<IQuestStorage, QuestDbStorage>();
-			builder.Services.AddScoped<IRewardStorage, RewardDbStorage>();
-			builder.Services.AddScoped<IAccountStorage, AccountDbStorage>();
-			builder.Services.AddScoped<IAccountProcessor, AccountProcessor>();
-			builder.Services.AddScoped<IRewardProcessor, RewardProcessor>();
-			builder.Services.AddScoped<IQuestProcessor, QuestProcessor>();
+			RegisterServices(builder.Services);
 
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
 
 			var app = builder.Build();
 
+			ConfigureApplication(app);
+
+			app.Run();
+		}
+
+		public static void RegisterServices(IServiceCollection services)
+		{
+			services.AddControllers();
+			services.AddDbContext<LifeQuestContext>(options => options.UseSqlServer("Data Source=127.0.0.1;Initial Catalog=life-quest-db;User ID=sa;Password=P@ssw0rd!;Encrypt=False;Trust Server Certificate=True"));
+			services.AddScoped<IQuestStorage, QuestDbStorage>();
+			services.AddScoped<IRewardStorage, RewardDbStorage>();
+			services.AddScoped<IAccountStorage, AccountDbStorage>();
+			services.AddScoped<IAccountProcessor, AccountProcessor>();
+			services.AddScoped<IRewardProcessor, RewardProcessor>();
+			services.AddScoped<IQuestProcessor, QuestProcessor>();
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+		}
+
+		public static WebApplication ConfigureApplication(WebApplication app)
+		{
 			// Configure the HTTP request pipeline.
-			if( app.Environment.IsDevelopment() )
+			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
 
 			app.UseHttpsRedirection();
-
 			app.UseAuthorization();
-
 			app.MapControllers();
 
-			app.Run();
+			return app;
 		}
 	}
 }

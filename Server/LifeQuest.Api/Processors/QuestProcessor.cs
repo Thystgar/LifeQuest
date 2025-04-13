@@ -22,12 +22,12 @@ namespace LifeQuest.Api.Processors
 
         public async Task<QuestApiModel> CompleteQuestAsync(string userId, string questId) 
         {
+            //TODO: complete quest
+
             var quests = await _storage.GetQuestsAsync();
             await _account.AddPointsAsync(userId, quests.FirstOrDefault(q => q.Id == questId).Value);
             var quest = await _storage.GetQuestByIdAsync(questId);
             return quest.ToApiModel();
-
-
         }
     }
 }

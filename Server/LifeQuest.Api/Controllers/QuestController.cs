@@ -31,6 +31,5 @@ namespace LifeQuest.Api.Controllers
 
             return Ok(quest);
         }
-
     }
 }
