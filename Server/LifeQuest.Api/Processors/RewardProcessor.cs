@@ -4,7 +4,7 @@ using LifeQuest.Api.Storage;
 
 namespace LifeQuest.Api.Processors
 {
-    public class RewardProcessor
+    public class RewardProcessor : IRewardProcessor
     {
         private readonly IRewardStorage _storage;
         public RewardProcessor(IRewardStorage storage)
