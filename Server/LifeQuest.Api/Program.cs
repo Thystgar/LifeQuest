@@ -11,7 +11,7 @@ namespace LifeQuest.Api
 			var builder = WebApplication.CreateBuilder();
 
 			// Add services to the container.
-			RegisterServices(builder.Services);
+			RegisterServices(builder.Services, builder.Configuration);
 
 
 			var app = builder.Build();
@@ -21,10 +21,12 @@ namespace LifeQuest.Api
 			app.Run();
 		}
 
-		public static void RegisterServices(IServiceCollection services)
-		{
-			services.AddControllers();
-			services.AddDbContext<LifeQuestContext>(options => options.UseSqlServer("Data Source=127.0.0.1;Initial Catalog=life-quest-db;User ID=sa;Password=P@ssw0rd!;Encrypt=False;Trust Server Certificate=True"));
+		public static void RegisterServices(IServiceCollection services, IConfiguration config)
+        {
+            var connectionString = config.GetValue<string>("Database:ConnectionString");
+
+            services.AddControllers();
+			services.AddDbContext<LifeQuestContext>(options => options.UseSqlServer(connectionString));
 			services.AddScoped<IQuestStorage, QuestDbStorage>();
 			services.AddScoped<IRewardStorage, RewardDbStorage>();
 			services.AddScoped<IAccountStorage, AccountDbStorage>();
