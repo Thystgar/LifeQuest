@@ -11,23 +11,15 @@ Before you begin, ensure you have met the following requirements:
 - Visual Studio: [Download Visual Studio](https://visualstudio.microsoft.com/)
 - VS Code Insiders
 - [React native](https://reactnative.dev/docs/set-up-your-environment)
-- Install packages (navigate to App folder):
-    ```sh
-    npm install -g expo-cli
-    npm install expo
-	npm install expo-router
-    ```
-- Expo framework for React native: [Expo framework](https://docs.expo.dev/get-started/create-a-project/)
-    ```sh
-    npx create-expo-app@latest
-    ```
-- Expo app on Google play to test on mobile device
 
 ### Clone the Repository
 1. Copy your SSH key to `C:\Users\<user>\.ssh`
 2. Clone the repository using the SSH key
 
 ## App
+
+### Create app
+Create initial app using ```npx @react-native-community/cli init lifequest```
 
 ### Run locally
 Go to folder App and run
@@ -71,20 +63,25 @@ Need to have docker running locally. The command will create an image without th
 	```
 
 ### Push to container registry
-The image can be uploaded directly to [container registry](https://portal.azure.com/#@janamediceseznam.onmicrosoft.com/resource/subscriptions/dc82971a-f484-4c22-bb31-c36b9805a147/resourceGroups/life-quest/providers/Microsoft.ContainerRegistry/registries/lifequest/overview)
+The image can be uploaded directly to container registry lifequest
 	```sh
 	dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
 	```
 	
-Uploading might need ```docker login```. It can also be uploaded from docker:
-A new lifequest.azurecr.io Azure container registry have been created for storing the container. To push the container from docker to the registry:
-	```sh
-	docker login
-	docker tag life-quest-api lifequest.azurecr.io/life-quest-api #tag the image for upload
-	docker push lifequest.azurecr.io/lifequest-api #upload the image
-	```
+you will first need to login ```az acr login --name lifequest```.
 
-### Run locally
+### Azure Container
+We will deploy the container as Azure container instance. We need to create Azure container instance
+- make sure the port on the container is correctly setup
+- configure the log analysics workspace for logs
+- assign user managed identity to container
+
+To grant container access to the SQL db, create the user for the container MI in the db and grant the MI access to db 
+	```sh
+	CREATE USER [life-quest-api] FROM EXTERNAL PROVIDER;
+	ALTER ROLE db_datareader ADD MEMBER [life-quest-api];
+	ALTER ROLE db_datawriter ADD MEMBER [life-quest-api];
+	```
 
 ## CI/CD
 
