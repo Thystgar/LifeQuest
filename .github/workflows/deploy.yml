@@ -37,5 +37,6 @@ jobs:
         working-directory: Server
 
     steps:
+    - uses: actions/checkout@v4
     - name: Publish container
       run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
