@@ -34,7 +34,7 @@ Go to folder App and run
 [Create and apply migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
 	```sh
     dotnet tool install --global dotnet-ef
-    cd C:/LifeQuest/Server
+    cd ~/Server/LifeQuest.Api
     dotnet add package Microsoft.EntityFrameworkCore.Design
 	```
 

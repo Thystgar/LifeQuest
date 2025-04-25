@@ -1,22 +1,14 @@
-using Azure.Storage.Blobs.Models;
 using LifeQuest.Api.Controllers;
 using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Models.Storage;
-using LifeQuest.Api.Processors;
 using LifeQuest.Api.Storage;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using System.Net;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Client;
-using Moq;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace LifeQuest.Api.Tests.Controllers
 {
@@ -61,7 +53,6 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact]
         public async Task GetRewardsAsync_ReturnsOkWithRewards()
         {
-            // Arrange
             var mockRewards = new List<RewardStorageModel>
             {
                 new RewardStorageModel { Id = "1", Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false },
@@ -70,10 +61,8 @@ namespace LifeQuest.Api.Tests.Controllers
 
             _rewardStorageMock.Setup(rs => rs.GetRewardsAsync()).ReturnsAsync(mockRewards);
 
-            // Act
             var response = await _client.GetAsync("/reward");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -88,7 +77,6 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact]
         public async Task RedeemRewardAsync_ReturnsOkWithRedeemedReward()
         {
-            // Arrange
             var rewardId = "1";
             var accountId = "userIdTBD";
             var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false };
@@ -99,10 +87,8 @@ namespace LifeQuest.Api.Tests.Controllers
             _rewardStorageMock.Setup(rs => rs.GetRewardByIdAsync(rewardId)).ReturnsAsync(mockReward);
             _rewardStorageMock.Setup(rs => rs.UpdateRewardAsync(It.IsAny<RewardStorageModel>())).Returns(Task.CompletedTask);
 
-            // Act
             var response = await _client.PutAsync($"/Reward/{rewardId}/redeem", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -116,7 +102,6 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact]
         public async Task RedeemRewardAsync_UpdatesRewardInStorage()
         {
-            // Arrange
             var rewardId = "1";
             var accountId = "userIdTBD";
             var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false };
@@ -126,10 +111,8 @@ namespace LifeQuest.Api.Tests.Controllers
             _rewardStorageMock.Setup(rs => rs.GetRewardByIdAsync(rewardId)).ReturnsAsync(mockReward);
             _rewardStorageMock.Setup(rs => rs.UpdateRewardAsync(It.IsAny<RewardStorageModel>())).Returns(Task.CompletedTask);
 
-            // Act
             var response = await _client.PutAsync($"/Reward/{rewardId}/redeem", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             _rewardStorageMock.Verify(rs => rs.UpdateRewardAsync(It.Is<RewardStorageModel>(r => r.Id == rewardId && r.Redeemed)), Times.Once);
         }
@@ -137,7 +120,6 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact]
         public async Task RedeemRewardAsync_DeductsPointsFromAccount()
         {
-            // Arrange
             var rewardId = "1";
             var accountId = "userIdTBD";
             var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false };
@@ -149,10 +131,8 @@ namespace LifeQuest.Api.Tests.Controllers
             _accountStorageMock.Setup(s => s.GetAccountByIdAsync(accountId)).ReturnsAsync(mockAccount);
             _accountStorageMock.Setup(s => s.UpdateAccountAsync(It.IsAny<AccountStorageModel>())).Returns(Task.CompletedTask);
 
-            // Act
             var response = await _client.PutAsync($"/Reward/{rewardId}/redeem", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             _accountStorageMock.Verify(s => s.GetAccountByIdAsync(accountId), Times.Once);
             _accountStorageMock.Verify(s => s.UpdateAccountAsync(It.Is<AccountStorageModel>(a => a.Points == 40)), Times.Once);
@@ -161,7 +141,6 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact]
         public async Task AddRewardAsync_ReturnsOkWithAddedReward()
         {
-            // Arrange
             var newReward = new RewardApiModel { Id = "3", Name = "Reward3", Description = "Description3", Value = 30, Redeemed = false };
             var storageReward = new RewardStorageModel { Id = "3", Name = "Reward3", Description = "Description3", Value = 30, Redeemed = false };
 
@@ -169,10 +148,8 @@ namespace LifeQuest.Api.Tests.Controllers
 
             var content = new StringContent(JsonSerializer.Serialize(newReward), System.Text.Encoding.UTF8, "application/json");
 
-            // Act
             var response = await _client.PostAsync("/Reward", content);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -186,30 +163,24 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact]
         public async Task DeleteRewardAsync_ReturnsNoContent()
         {
-            // Arrange
             var rewardId = "1";
 
             _rewardStorageMock.Setup(rs => rs.DeleteRewardAsync(rewardId)).Returns(Task.CompletedTask);
 
-            // Act
             var response = await _client.DeleteAsync($"/Reward/{rewardId}");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         [Fact]
         public async Task DeleteRewardAsync_CallsDeleteMethod()
         {
-            // Arrange
             var rewardId = "1";
 
             _rewardStorageMock.Setup(rs => rs.DeleteRewardAsync(rewardId)).Returns(Task.CompletedTask);
 
-            // Act
             var response = await _client.DeleteAsync($"/Reward/{rewardId}");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             _rewardStorageMock.Verify(rs => rs.DeleteRewardAsync(rewardId), Times.Once);
         }

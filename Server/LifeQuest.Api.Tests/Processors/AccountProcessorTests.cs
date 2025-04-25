@@ -1,8 +1,8 @@
 using LifeQuest.Api.Processors;
 using LifeQuest.Api.Models.API;
+using LifeQuest.Api.Models.Mappers;
 using LifeQuest.Api.Storage;
 using Moq;
-using LifeQuest.Api.Models.Mappers;
 
 namespace LifeQuest.Api.Tests.Processors
 {
@@ -20,14 +20,11 @@ namespace LifeQuest.Api.Tests.Processors
         [Fact]
         public async Task GetAccountAsync_ReturnsAccount()
         {
-            // Arrange
             var account = new AccountApiModel { Id = "1", Name = "Test Account", Points = 100 };
             _mockStorage.Setup(s => s.GetAccountByIdAsync("1")).ReturnsAsync(account.ToStorageModel());
 
-            // Act
             var result = await _accountProcessor.GetAccountAsync("1");
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal("Test Account", result.Name);
             Assert.Equal(100, result.Points);
