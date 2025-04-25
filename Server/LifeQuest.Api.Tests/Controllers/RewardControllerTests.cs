@@ -19,20 +19,19 @@ namespace LifeQuest.Api.Tests.Controllers
         private readonly HttpClient _client;
         private readonly Mock<IRewardStorage> _rewardStorageMock;
         private readonly Mock<IAccountStorage> _accountStorageMock;
-        private readonly Mock<IConfiguration> _configurationMock;
 
         public RewardControllerTests()
         {
             _rewardStorageMock = new Mock<IRewardStorage>();
             _accountStorageMock = new Mock<IAccountStorage>();
-            _configurationMock = new Mock<IConfiguration>();
 
             var webAppFactory = new WebApplicationFactory<Program>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.ConfigureServices(services =>
                     {
-                        Program.RegisterServices(services, _configurationMock.Object);
+                        var config = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+                        Program.RegisterServices(services, config);
                         // Replace the IRewardStorage and IAccountStorage with the mocks
                         services.AddSingleton(_rewardStorageMock.Object);
                         services.AddSingleton(_accountStorageMock.Object);
