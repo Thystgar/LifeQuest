@@ -10,8 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  Build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,3 +28,14 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  Deploy:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Server
+
+    steps:
+    - name: Publish container
+      run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
