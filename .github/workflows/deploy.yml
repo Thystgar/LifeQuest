@@ -49,7 +49,7 @@ jobs:
         az container create \
           --name lifequest \
           --resource-group lifequest-test \
-          --image lifequest:latest \
+          --image lifequest-api:latest \
           --os-type Linux \
           --cpu 1 \
           --memory 1.5 \
@@ -57,3 +57,7 @@ jobs:
           --ports 8080 \
           --environment-variables ASPNETCORE_ENVIRONMENT=Test
           --dns-name-label lifequest
+
+    - name: Deploy resources
+      run: az deployment group create --resource-group lifequest-test --parameters lifequest-test.bicepparam
+      working-directory: deployment
