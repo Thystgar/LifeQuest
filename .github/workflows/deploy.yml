@@ -50,9 +50,9 @@ jobs:
           --name lifequest \
           --resource-group lifequest-test \
           --image lifequest:latest \
+          --os-type Linux \
           --cpu 1 \
           --memory 1.5 \
-          --osType Linux \
           --ip-address public \
           --ports 8080 \
           --environment-variables ASPNETCORE_ENVIRONMENT=Test
