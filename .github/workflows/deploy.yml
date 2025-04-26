@@ -42,3 +42,16 @@ jobs:
       run: az acr login --name lifequest
     - name: Publish container
       run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
+    - name: Deploy container
+      run: |
+        az container create \
+          --name lifequest \
+          --resource-group lifequest-test \
+          --image lifequest.azurecr.io/lifequest:latest \
+          --cpu 1 \
+          --memory 1.5 \
+          --ip-address public \
+          --ports 8080 \
+          --registry-login-server lifequest.azurecr.io \
+          --environment-variables ASPNETCORE_ENVIRONMENT=Test
+          --dns-name-label lifequest
