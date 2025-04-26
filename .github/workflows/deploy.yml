@@ -38,10 +38,10 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
-    - name: Azure ACR login
-      run: az acr login --name lifequest
-    - name: Publish container
-      run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
+    # - name: Azure ACR login
+    #   run: az acr login --name lifequest
+    # - name: Publish container
+    #   run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
     - name: Publish container local
       run: dotnet publish --os linux --arch x64 /t:PublishContainer
     - name: Deploy local
@@ -52,19 +52,7 @@ jobs:
           --image lifequest:latest \
           --cpu 1 \
           --memory 1.5 \
-          --ip-address public \
-          --ports 8080 \
-          --environment-variables ASPNETCORE_ENVIRONMENT=Test
-          --dns-name-label lifequest
-
-    - name: Deploy container
-      run: |
-        az container create \
-          --name lifequest \
-          --resource-group lifequest-test \
-          --image lifequest.azurecr.io/lifequest:latest \
-          --cpu 1 \
-          --memory 1.5 \
+          --osType Linux \
           --ip-address public \
           --ports 8080 \
           --environment-variables ASPNETCORE_ENVIRONMENT=Test
