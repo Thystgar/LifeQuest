@@ -52,6 +52,5 @@ jobs:
           --memory 1.5 \
           --ip-address public \
           --ports 8080 \
-          --registry-login-server lifequest.azurecr.io \
           --environment-variables ASPNETCORE_ENVIRONMENT=Test
           --dns-name-label lifequest
