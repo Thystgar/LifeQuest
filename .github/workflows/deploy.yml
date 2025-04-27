@@ -67,10 +67,14 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
     # on subscription level create RGs, in identities create identities, in shared create acr + assign access, in logging create log workspace
+    # - name: Deploy shared resources
+    #   run: |
+    #     az config set bicep.use_binary_from_path=false
+    #     az deployment group create --resource-group lifequest-shared --parameters lifequest-shared.bicepparam
     - name: Deploy shared resources
       run: |
         az config set bicep.use_binary_from_path=false
-        az deployment group create --resource-group lifequest-shared --parameters lifequest-shared.bicepparam
+        az deployment subscription create --parameters lifequest-setup.bicepparam
 
   deploytest:
     name: Deploy Test environment
