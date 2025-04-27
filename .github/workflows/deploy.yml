@@ -54,6 +54,7 @@ jobs:
       run:
         working-directory: Deployment
     steps:
+    - uses: actions/checkout@v4
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
@@ -74,6 +75,7 @@ jobs:
       run:
         working-directory: Deployment
     steps:
+    - uses: actions/checkout@v4
     # run migrations
     - name: Azure CLI Login
       uses: azure/login@v2
