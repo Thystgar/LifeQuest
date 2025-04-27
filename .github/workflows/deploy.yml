@@ -66,6 +66,7 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
+    # on subscription level create RGs, in identities create identities, in shared create acr + assign access, in logging create log workspace
     - name: Deploy shared resources
       run: |
         az config set bicep.use_binary_from_path=false
@@ -82,7 +83,6 @@ jobs:
       run:
         working-directory: Deployment
     steps:
-    # run migrations
     - uses: actions/checkout@v4
     - name: Azure CLI Login
       uses: azure/login@v2
@@ -91,7 +91,9 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
-    #deploy test environment
+    # TODO: run SQL deployment
+    # TODO: run migrations
+    # TODO: deploy test environment container
     - name: Deploy Test environment
       run: |
         az config set bicep.use_binary_from_path=false
