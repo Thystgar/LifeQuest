@@ -96,4 +96,3 @@ jobs:
       run: |
         az config set bicep.use_binary_from_path=false
         az deployment group create --resource-group lifequest-test --template-file lifequest.bicep --parameters environment='test' location='northeurope'
-      working-directory: deployment
