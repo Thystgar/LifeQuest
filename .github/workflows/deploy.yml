@@ -10,15 +10,15 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Build:
+  build:
+    name: Build, test and publish container
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
     defaults:
       run:
-        working-directory: Server
-
+        working-directory: server
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -38,20 +38,50 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
-    
-    #deploy shared resources
-    - name: Deploy shared resources
-      run: az deployment group create --resource-group lifequest-shared --parameters lifequest-shared.bicepparam
-      working-directory: deployment
-
     #upload image
     - name: Azure ACR login
       run: az acr login --name lifequest
     - name: Publish container
       run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
+  
+  deployshared:
+    name: Deploy shared resources
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: deployment
+    steps:
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        auth-type: SERVICE_PRINCIPAL
+    - name: Deploy shared resources
+      run: az deployment group create --resource-group lifequest-shared --parameters lifequest-shared.bicepparam
 
+  deploytest:
+    name: Deploy Test environment
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: deployment
+    steps:
     # run migrations
-
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        auth-type: SERVICE_PRINCIPAL
     #deploy test environment
     - name: Deploy Test environment
       run: az deployment group create --resource-group lifequest-test --template-file lifequest.bicep --parameters environment='test' location='northeurope'
