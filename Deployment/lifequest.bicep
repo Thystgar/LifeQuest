@@ -20,7 +20,7 @@ resource container_identity 'Microsoft.ManagedIdentity/userAssignedIdentities@20
 
 module roleAssignmentModule 'modules/acrRoleAssignment-module.bicep' = {
   name: 'roleAssignmentModule'
-  scope: resourceGroup('life-quest-shared')
+  scope: resourceGroup('lifequest-shared')
   params: {
     roleId: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
     principalId: container_identity.properties.principalId
