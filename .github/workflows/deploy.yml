@@ -38,26 +38,21 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
-    # - name: Azure ACR login
-    #   run: az acr login --name lifequest
-    # - name: Publish container
-    #   run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
-    - name: Publish container local
-      run: dotnet publish --os linux --arch x64 /t:PublishContainer
-    - name: Deploy local
-      run: |
-        az container create \
-          --name lifequest \
-          --resource-group lifequest-test \
-          --image lifequest-api:latest \
-          --os-type Linux \
-          --cpu 1 \
-          --memory 1.5 \
-          --ip-address public \
-          --ports 8080 \
-          --environment-variables ASPNETCORE_ENVIRONMENT=Test
-          --dns-name-label lifequest
+    
+    #deploy shared resources
+    - name: Deploy shared resources
+      run: az deployment group create --resource-group lifequest-shared --parameters lifequest-shared.bicepparam
+      working-directory: deployment
 
-    - name: Deploy resources
-      run: az deployment group create --resource-group lifequest-test --parameters lifequest-test.bicepparam
+    #upload image
+    - name: Azure ACR login
+      run: az acr login --name lifequest
+    - name: Publish container
+      run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
+
+    # run migrations
+
+    #deploy test environment
+    - name: Deploy Test environment
+      run: az deployment group create --resource-group lifequest-test --template-file lifequest.bicep --parameters environment='test' location='northeurope'
       working-directory: deployment

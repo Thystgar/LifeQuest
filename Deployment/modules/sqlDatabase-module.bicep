@@ -1,12 +1,10 @@
-param serverName string
-param adminUser string = 'janamedice_seznam.cz#EXT#@janamediceseznam.onmicrosoft.com'
-param databaseName string
 param location string 
+param environment string
 
 targetScope = 'resourceGroup'
 
 resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
-  name: serverName
+  name: 'lifequest-${environment}-db-server'
   location: location
   properties: {
     version: '12.0'
@@ -14,8 +12,9 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
     publicNetworkAccess: 'Enabled'
     administrators: {
       administratorType: 'ActiveDirectory'
-      login: adminUser
-      sid: '276b2d9d-0e24-4f07-89e3-67c304ffb608'
+      principalType: 'Group'
+      login: 'GitHub'
+      sid: '12ac0b55-3a84-4933-b5f0-9e7bbdce84b8'
       tenantId: 'e9c8307d-b05f-4d2b-8132-5d4711a339fa'
       azureADOnlyAuthentication: true
     }
@@ -24,7 +23,7 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
 
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
   parent: sqlServer
-  name: databaseName
+  name: 'lifequest-${environment}-db'
   location: location
   sku: {
     name: 'Basic'
