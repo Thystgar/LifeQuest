@@ -52,7 +52,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: deployment
+        working-directory: Deployment
     steps:
     - name: Azure CLI Login
       uses: azure/login@v2
@@ -72,7 +72,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: deployment
+        working-directory: Deployment
     steps:
     # run migrations
     - name: Azure CLI Login
