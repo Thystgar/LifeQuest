@@ -6,9 +6,19 @@ resource resourceGroups 'Microsoft.Resources/resourceGroups@2022-09-01' = [for e
   location: location
 }]
 
+resource identityResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'lifequest-identity'
+  location: location
+}
+
+resource sharedResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'lifequest-shared'
+  location: location
+}
+
 module identityModule 'modules/identity-module.bicep' = {
   name: 'identityModule'
-  scope: resourceGroup('lifequest-identity')
+  scope: identityResourceGroup
   params: {
     location: location
     environments: environments
@@ -17,7 +27,7 @@ module identityModule 'modules/identity-module.bicep' = {
 
 module acrModule 'modules/acr-module.bicep' = {
   name: 'acrModule'
-  scope: resourceGroup('lifequest-shared')
+  scope: sharedResourceGroup
   params: {
     location: location
     identities: identityModule.outputs.principalIds

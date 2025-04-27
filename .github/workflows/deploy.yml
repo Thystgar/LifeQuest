@@ -74,7 +74,7 @@ jobs:
     - name: Deploy shared resources
       run: |
         az config set bicep.use_binary_from_path=false
-        az deployment subscription create --parameters lifequest-setup.bicepparam
+        az deployment sub create --location northeurope --parameters lifequest-setup.bicepparam
 
   deploytest:
     name: Deploy Test environment
