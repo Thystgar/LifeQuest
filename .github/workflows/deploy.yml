@@ -45,6 +45,7 @@ jobs:
       run: az acr login --name lifequest
     - name: Publish container
       run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
+      #run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io/lifequest-api:${{ github.run_number }}
   
   deployshared:
     name: Deploy shared resources
