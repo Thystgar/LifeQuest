@@ -55,7 +55,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: deployment
+        working-directory: Deployment
 
     steps:
     - name: Azure CLI Login
@@ -77,7 +77,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: deployment
+        working-directory: Deployment
 
     steps:
 
