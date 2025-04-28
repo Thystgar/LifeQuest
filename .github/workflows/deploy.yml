@@ -9,9 +9,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  location: northeurope
+  environments: 'test' # Add/remove environments as needed, comma-separated if multiple
+
 jobs:
-  build:
-    name: Build, test and publish container
+  buildServer:
+    name: Build server
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -47,9 +51,9 @@ jobs:
       run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io
       #run: dotnet publish --os linux --arch x64 /t:PublishContainer -p ContainerRegistry=lifequest.azurecr.io/lifequest-api:${{ github.run_number }}
   
-  deployshared:
-    name: Deploy shared resources
-    needs: build
+  deployShared:
+    name: Deploy shared
+    needs: buildServer
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -74,11 +78,11 @@ jobs:
     - name: Deploy shared resources
       run: |
         az config set bicep.use_binary_from_path=false
-        az deployment sub create --location northeurope --parameters lifequest-setup.bicepparam
+        az deployment sub create --location ${{ env.location }} --parameters lifequest-setup.bicepparam
 
-  deploytest:
-    name: Deploy Test environment
-    needs: deployshared
+  deployEnv:
+    name: Deploy ${{ matrix.environment }}
+    needs: deployShared
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -86,6 +90,9 @@ jobs:
     defaults:
       run:
         working-directory: Deployment
+    strategy:
+      matrix:
+        environment: [test] # Add/remove environments as needed
     steps:
     - uses: actions/checkout@v4
     - name: Azure CLI Login
@@ -95,10 +102,35 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
-    # TODO: run SQL deployment
-    # TODO: run migrations
-    # TODO: deploy test environment container
-    - name: Deploy Test environment
+    - name: Deploy ${{ matrix.environment }} database
       run: |
         az config set bicep.use_binary_from_path=false
-        az deployment group create --resource-group lifequest-test --template-file lifequest.bicep --parameters environment='test' location='northeurope'
+        az deployment group create --resource-group lifequest-${{ matrix.environment }} --template-file lifequest-db.bicep --parameters environment='${{ matrix.environment }}' location='${{ env.location }}'
+        
+    # TODO: run migrations
+    - name: Deploy ${{ matrix.environment }} environment
+      run: |
+        az config set bicep.use_binary_from_path=false
+        az deployment group create --resource-group lifequest-${{ matrix.environment }} --template-file lifequest-api.bicep --parameters environment='${{ matrix.environment }}' location='${{ env.location }}'
+  
+  buildApp:
+    name: Build Android app
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: Client
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install npm dependencies
+      run: |
+        npm install
+    - name: Build Android Release
+      run: |
+        cd android && ./gradlew assembleRelease
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: lifequest-app.apk
+        path: android/app/build/outputs/apk/release/

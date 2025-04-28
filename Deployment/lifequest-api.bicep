@@ -3,16 +3,6 @@ param environment string
 
 targetScope = 'resourceGroup'
 
-
-module sqlDatabaseModule 'modules/sqlDatabase-module.bicep' = {
-  name: 'sqlDatabaseModule'
-  scope: resourceGroup('lifequest-test')
-  params: {
-    location: location
-    environment: environment
-  }
-}
-
 resource containerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing =  {
   name: 'lifequest-${environment}-api'
   scope: resourceGroup('lifequest-identity')
