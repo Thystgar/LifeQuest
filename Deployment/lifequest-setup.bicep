@@ -1,6 +1,7 @@
 param environments array
 param location string
 
+// create resource groups
 resource resourceGroups 'Microsoft.Resources/resourceGroups@2022-09-01' = [for environment in environments: {
   name: 'lifequest-${environment}'
   location: location
@@ -21,6 +22,7 @@ resource dbResourceGroups 'Microsoft.Resources/resourceGroups@2022-09-01' = [for
   location: location
 }]
 
+// create all container identities in separate resource group so if the compute needs to be deleted they are preserved along with any access
 module identityModule 'modules/identity-module.bicep' = {
   name: 'identityModule'
   scope: identityResourceGroup
@@ -30,6 +32,17 @@ module identityModule 'modules/identity-module.bicep' = {
   }
 }
 
+// Create all resources relevant to logging and grant the container access
+module logsModule 'modules/logs-module.bicep' = {
+  name: 'logsModule'
+  scope: identityResourceGroup
+  params: {
+    location: location
+    identities: identityModule.outputs.principalIds
+  }
+}
+
+// create Azure container registry and grant the container identity access
 module acrModule 'modules/acr-module.bicep' = {
   name: 'acrModule'
   scope: sharedResourceGroup
