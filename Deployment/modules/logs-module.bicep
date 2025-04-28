@@ -19,6 +19,7 @@ resource logWorspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   }
 }
 
+// grant Monitoring Metrics Publisher access to log workspace
 resource containerAccess 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [for identity in identities: {
   name: guid(logWorspace.id, identity, '3913510d-42f4-4e42-8a64-420c390055eb')
   scope: logWorspace
