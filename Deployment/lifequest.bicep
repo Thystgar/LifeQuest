@@ -6,37 +6,25 @@ targetScope = 'resourceGroup'
 
 module sqlDatabaseModule 'modules/sqlDatabase-module.bicep' = {
   name: 'sqlDatabaseModule'
-  scope: resourceGroup('life-quest-shared')
+  scope: resourceGroup('lifequest-test')
   params: {
     location: location
     environment: environment
   }
 }
 
-resource container_identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
+resource containerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing =  {
   name: 'lifequest-${environment}-api'
-  location: location
-}
-
-module roleAssignmentModule 'modules/acrRoleAssignment-module.bicep' = {
-  name: 'roleAssignmentModule'
-  scope: resourceGroup('lifequest-shared')
-  params: {
-    roleId: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
-    principalId: container_identity.properties.principalId
-  }
+  scope: resourceGroup('lifequest-identity')
 }
 
 resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-preview' = {
   name: 'lifequest-${environment}-container'
   location: location
-  dependsOn: [
-    roleAssignmentModule
-  ]
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${container_identity.id}': {}
+      '${containerIdentity.id}': {}
     }
   }
   properties: {
@@ -68,7 +56,7 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-previ
     imageRegistryCredentials: [
       {
         server: 'lifequest.azurecr.io'
-        identity: container_identity.id
+        identity: containerIdentity.id
       }
     ]
     osType: 'Linux'
