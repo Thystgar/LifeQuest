@@ -105,7 +105,7 @@ jobs:
     - name: Deploy ${{ matrix.environment }} database
       run: |
         az config set bicep.use_binary_from_path=false
-        az deployment group create --resource-group lifequest-${{ matrix.environment }} --template-file lifequest-db.bicep --parameters environment='${{ matrix.environment }}' location='${{ env.location }}'
+        az deployment group create --resource-group lifequest-${{ matrix.environment }}-db --template-file lifequest-db.bicep --parameters environment='${{ matrix.environment }}' location='${{ env.location }}'
         
     # TODO: run migrations
     - name: Deploy ${{ matrix.environment }} environment
@@ -130,7 +130,7 @@ jobs:
       run: |
         cd android && ./gradlew assembleRelease
     - name: Upload Artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: lifequest-app.apk
         path: android/app/build/outputs/apk/release/

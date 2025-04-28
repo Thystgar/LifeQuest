@@ -16,6 +16,11 @@ resource sharedResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
 }
 
+resource dbResourceGroups 'Microsoft.Resources/resourceGroups@2022-09-01' = [for environment in environments: {
+  name: 'lifequest-${environment}-db'
+  location: location
+}]
+
 module identityModule 'modules/identity-module.bicep' = {
   name: 'identityModule'
   scope: identityResourceGroup
