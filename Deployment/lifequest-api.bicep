@@ -4,7 +4,6 @@ targetScope = 'resourceGroup'
 
 resource containerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing =  {
   name: 'lifequest-${environment}-api'
-  scope: resourceGroup('lifequest-identity')
 }
 
 resource logsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
