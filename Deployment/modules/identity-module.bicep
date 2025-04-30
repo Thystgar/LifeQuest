@@ -4,5 +4,3 @@ resource containerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@202
   name: 'lifequest-${environment}-api'
   location: resourceGroup().location
 }
-
-output containerIdentity object = containerIdentity
