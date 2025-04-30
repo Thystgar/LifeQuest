@@ -41,7 +41,9 @@ module acrModule 'modules/acr-module.bicep' = {
   name: 'acrModule'
   scope: sharedResourceGroup
   params: {
-    environments: environments
+    identities: [for (environment, i) in environments: {
+      name: identityModule[i].outputs.containerIdentity
+    }]
   }
 }
 
