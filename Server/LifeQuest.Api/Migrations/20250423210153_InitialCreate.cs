@@ -10,6 +10,10 @@ namespace LifeQuest.Api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("CREATE USER [lifequest-test-api] FROM EXTERNAL PROVIDER;");
+            migrationBuilder.Sql("ALTER ROLE db_datareader ADD MEMBER [lifequest-test-api];");
+            migrationBuilder.Sql("ALTER ROLE db_datawriter ADD MEMBER [lifequest-test-api];");
+
             migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
@@ -57,6 +61,10 @@ namespace LifeQuest.Api.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("ALTER ROLE db_datareader DROP MEMBER [lifequest-test-api];");
+            migrationBuilder.Sql("ALTER ROLE db_datawriter DROP MEMBER [lifequest-test-api];");
+            migrationBuilder.Sql("DROP USER [lifequest-test-api];");
+
             migrationBuilder.DropTable(
                 name: "Accounts");
 

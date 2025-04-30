@@ -91,6 +91,10 @@ jobs:
         working-directory: Deployment
     steps:
     - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
@@ -103,6 +107,14 @@ jobs:
         az config set bicep.use_binary_from_path=false
         az deployment group create --resource-group lifequest-test-db --template-file lifequest-db.bicep --parameters environment='test'
 
+    - name: Run EF Core migrations
+      working-directory: Server/LifeQuest.Api
+      run: |
+        ls
+        dotnet tool install --global dotnet-ef
+        dotnet build
+        export PATH="$PATH:/home/runner/.dotnet/tools"
+        dotnet ef database update -- --environment test --verbose
     # TODO: run migrations
 
     - name: Deploy test environment
