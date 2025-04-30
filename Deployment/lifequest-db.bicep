@@ -1,11 +1,10 @@
-param location string 
 param environment string
 
 targetScope = 'resourceGroup'
 
 resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   name: 'lifequest-${environment}-db-server'
-  location: location
+  location: resourceGroup().location
   properties: {
     version: '12.0'
     minimalTlsVersion: '1.2'
@@ -24,7 +23,7 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
   parent: sqlServer
   name: 'lifequest-${environment}-db'
-  location: location
+  location: resourceGroup().location
   sku: {
     name: 'Basic'
     tier: 'Basic'
