@@ -1,9 +1,8 @@
-param location string 
-param identities array
+param environments array
 
 resource logWorspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: 'lifequest-logs'
-  location: location
+  location: resourceGroup().location
   properties: {
     sku: {
       name: 'PerGB2018'
@@ -20,12 +19,17 @@ resource logWorspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
 }
 
 // grant Monitoring Metrics Publisher access to log workspace
-resource containerAccess 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [for identity in identities: {
-  name: guid(logWorspace.id, identity, '3913510d-42f4-4e42-8a64-420c390055eb')
+resource containerIdentities 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = [for environment in environments: {
+  name: 'lifequest-${environment}-api'
+  scope: resourceGroup('lifequest-${environment}')
+}]
+
+resource container_identity_access 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [for (environment, i) in environments: {
+  name: guid(logWorspace.id, containerIdentities[i].id, '7f951dda-4ed3-4680-a7ca-43fe172d538d')
   scope: logWorspace
   properties: {
-    principalId: identity
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '3913510d-42f4-4e42-8a64-420c390055eb')
+    principalId: containerIdentities[i].properties.principalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
     principalType: 'ServicePrincipal'
   }
 }]

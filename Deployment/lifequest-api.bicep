@@ -1,4 +1,3 @@
-param location string 
 param environment string
 
 targetScope = 'resourceGroup'
@@ -15,7 +14,7 @@ resource logsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' exi
 
 resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-preview' = {
   name: 'lifequest-${environment}-container'
-  location: location
+  location: resourceGroup().location
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
