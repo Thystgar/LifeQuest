@@ -35,7 +35,7 @@ module identityModule 'modules/identity-module.bicep' = {
 // Create all resources relevant to logging and grant the container access
 module logsModule 'modules/logs-module.bicep' = {
   name: 'logsModule'
-  scope: identityResourceGroup
+  scope: sharedResourceGroup
   params: {
     location: location
     identities: identityModule.outputs.principalIds
