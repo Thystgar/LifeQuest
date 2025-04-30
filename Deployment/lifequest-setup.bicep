@@ -19,9 +19,9 @@ resource dbResourceGroups 'Microsoft.Resources/resourceGroups@2022-09-01' = [for
 
 
 // create all container identities in separate resource group so if the compute needs to be deleted they are preserved along with any access
-module identityModule 'modules/identity-module.bicep' = [for environment in environments: {
+module identityModule 'modules/identity-module.bicep' = [for (environment, i) in environments: {
   name: 'identityModule'
-  scope: resourceGroups[environment]
+  scope: resourceGroups[i]
   params: {
     environment: environment
   }
