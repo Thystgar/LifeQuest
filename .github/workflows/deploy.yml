@@ -106,7 +106,13 @@ jobs:
       run: |
         az config set bicep.use_binary_from_path=false
         az deployment group create --resource-group lifequest-test-db --template-file lifequest-db.bicep --parameters environment='test'
-
+    - name: Add access to EntraId
+      run: |
+        Install-Module Microsoft.Graph.Authentication
+        Import-Module Microsoft.Graph.Authentication
+        Connect-MgGraph
+        $managedIdentity = Get-MgServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
+        New-MgGroupMember -GroupId 6896d772-3988-4cae-8cd7-6ebe133ed09c -DirectoryObjectId $managedIdentity.Id
     - name: Run EF Core migrations
       working-directory: Server/LifeQuest.Api
       run: |

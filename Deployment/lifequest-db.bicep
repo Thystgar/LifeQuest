@@ -2,9 +2,20 @@ param environment string
 
 targetScope = 'resourceGroup'
 
+resource dbIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
+  name: 'lifequest-${environment}-db'
+  location: resourceGroup().location
+}
+
 resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   name: 'lifequest-${environment}-db-server'
   location: resourceGroup().location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${dbIdentity.id}': {}
+    }
+  }
   properties: {
     version: '12.0'
     minimalTlsVersion: '1.2'
