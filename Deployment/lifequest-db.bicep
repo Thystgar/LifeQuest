@@ -20,6 +20,7 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
     version: '12.0'
     minimalTlsVersion: '1.2'
     publicNetworkAccess: 'Enabled'
+    primaryUserAssignedIdentityId: dbIdentity.id
     administrators: {
       administratorType: 'ActiveDirectory'
       principalType: 'Group'
