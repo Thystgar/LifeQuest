@@ -112,7 +112,7 @@ jobs:
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
         Install-Module Microsoft.Entra
         $token = (az account get-access-token --resource "https://graph.microsoft.com/" | ConvertFrom-Json).accessToken | ConvertTo-SecureString -AsPlainText -Force
-        Connect-Entra -AccessToken $token -TenantId $env:AZURE_TENANT_ID
+        Connect-Entra -AccessToken $token
         $managedIdentity = Get-EntraServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
         Add-EntraGroupMember -GroupId 6896d772-3988-4cae-8cd7-6ebe133ed09c -MemberId $managedIdentity.Id
     # https://learn.microsoft.com/en-us/ef/core/cli/dotnet#aspnet-core-environment
