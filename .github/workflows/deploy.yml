@@ -109,6 +109,7 @@ jobs:
     - name: Add access to EntraId
       shell: pwsh
       run: |
+        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
         Install-Module Microsoft.Entra
         $token = (az account get-access-token --resource "https://graph.microsoft.com/" | ConvertFrom-Json).accessToken
         Connect-Entra -TenantId  ${{ secrets.AZURE_TENANT_ID }} -Scopes "Directory.Read.All", "Group.ReadWrite.All" -AccessToken $token
