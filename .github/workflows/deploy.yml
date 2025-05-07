@@ -107,6 +107,7 @@ jobs:
         az config set bicep.use_binary_from_path=false
         az deployment group create --resource-group lifequest-test-db --template-file lifequest-db.bicep --parameters environment='test'
     - name: Add access to EntraId
+      shell: pwsh
       run: |
         Install-Module Microsoft.Graph.Authentication
         Import-Module Microsoft.Graph.Authentication
