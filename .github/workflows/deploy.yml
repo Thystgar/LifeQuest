@@ -112,7 +112,7 @@ jobs:
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
         Install-Module Microsoft.Entra
         $token = (az account get-access-token --resource "https://graph.microsoft.com/" | ConvertFrom-Json).accessToken | ConvertTo-SecureString -AsPlainText -Force
-        Connect-Entra -TenantId  ${{ secrets.AZURE_TENANT_ID }} -Scopes "Directory.Read.All", "Group.ReadWrite.All" -AccessToken $token
+        Connect-Entra -Scopes "Directory.Read.All", "Group.ReadWrite.All" -AccessToken $token
         $managedIdentity = Get-EntraServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
         Add-EntraGroupMember -GroupId 6896d772-3988-4cae-8cd7-6ebe133ed09c -MemberId $managedIdentity.Id
     
