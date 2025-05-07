@@ -111,7 +111,7 @@ jobs:
       run: |
         Install-Module Microsoft.Graph.Authentication
         Import-Module Microsoft.Graph.Authentication
-        Connect-MgGraph -TenantId e9c8307d-b05f-4d2b-8132-5d4711a339fa -Scopes "Directory.Read.All", "Group.ReadWrite.All"
+        Connect-MgGraph -TenantId e9c8307d-b05f-4d2b-8132-5d4711a339fa -Scopes "Directory.Read.All", "Group.ReadWrite.All" -ClientId ${{ secrets.AZURE_CLIENT_ID }}
         Install-Module Microsoft.Graph.Applications
         Import-Module Microsoft.Graph.Applications
         $managedIdentity = Get-MgServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
