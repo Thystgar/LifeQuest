@@ -112,20 +112,10 @@ jobs:
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
         Install-Module Microsoft.Entra
         $token = (az account get-access-token --resource "https://graph.microsoft.com/" | ConvertFrom-Json).accessToken | ConvertTo-SecureString -AsPlainText -Force
-        Connect-Entra -Scopes "Directory.Read.All", "Group.ReadWrite.All" -AccessToken $token
+        Connect-Entra -AccessToken $token -TenantId $env:AZURE_TENANT_ID
         $managedIdentity = Get-EntraServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
         Add-EntraGroupMember -GroupId 6896d772-3988-4cae-8cd7-6ebe133ed09c -MemberId $managedIdentity.Id
-    
-    # - name: Add access to EntraId2
-    #   shell: pwsh
-    #   run: |
-    #     Install-Module Microsoft.Graph.Authentication
-    #     Import-Module Microsoft.Graph.Authentication
-    #     Connect-MgGraph -TenantId  ${{ secrets.AZURE_TENANT_ID }} -Scopes "Directory.Read.All", "Group.ReadWrite.All" -ClientId ${{ secrets.AZURE_CLIENT_ID }}
-    #     Install-Module Microsoft.Graph.Applications
-    #     Import-Module Microsoft.Graph.Applications
-    #     $managedIdentity = Get-MgServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
-    #     New-MgGroupMember -GroupId 6896d772-3988-4cae-8cd7-6ebe133ed09c -DirectoryObjectId $managedIdentity.Id
+    # https://learn.microsoft.com/en-us/ef/core/cli/dotnet#aspnet-core-environment
     - name: Run EF Core migrations
       working-directory: Server/LifeQuest.Api
       run: |
