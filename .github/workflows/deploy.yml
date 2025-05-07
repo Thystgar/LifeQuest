@@ -111,7 +111,9 @@ jobs:
       run: |
         Install-Module Microsoft.Graph.Authentication
         Import-Module Microsoft.Graph.Authentication
-        Connect-MgGraph
+        Connect-MgGraph -TenantId e9c8307d-b05f-4d2b-8132-5d4711a339fa -Scopes "Directory.Read.All", "Group.ReadWrite.All"
+        Install-Module Microsoft.Graph.Applications
+        Import-Module Microsoft.Graph.Applications
         $managedIdentity = Get-MgServicePrincipal -Filter "displayName eq 'lifequest-test-db'"
         New-MgGroupMember -GroupId 6896d772-3988-4cae-8cd7-6ebe133ed09c -DirectoryObjectId $managedIdentity.Id
     - name: Run EF Core migrations
