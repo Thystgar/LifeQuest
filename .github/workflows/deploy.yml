@@ -102,10 +102,10 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: SERVICE_PRINCIPAL
-    - name: Deploy test database
-      run: |
-        az config set bicep.use_binary_from_path=false
-        az deployment group create --resource-group lifequest-test --template-file lifequest-db.bicep --parameters environment='test'
+    # - name: Deploy test database
+    #   run: |
+    #     az config set bicep.use_binary_from_path=false
+    #     az deployment group create --resource-group lifequest-test --template-file lifequest-db.bicep --parameters environment='test'
     # - name: Add access to EntraId
     #   shell: pwsh
     #   run: |
