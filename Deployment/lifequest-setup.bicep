@@ -21,7 +21,7 @@ module dbIdentity 'modules/identity-module.bicep' = {
   name: 'dbIdentity'
   scope: sharedResourceGroup
   params: {
-    name: 'lifequest--db'
+    name: 'lifequest-db'
   }
 }
 
