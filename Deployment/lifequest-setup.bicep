@@ -17,6 +17,13 @@ resource dbResourceGroups 'Microsoft.Resources/resourceGroups@2022-09-01' = [for
   location: location
 }]
 
+module dbIdentity 'modules/identity-module.bicep' = {
+  name: 'dbIdentity'
+  scope: sharedResourceGroup
+  params: {
+    name: 'lifequest--db'
+  }
+}
 
 // create all container identities in separate resource group so if the compute needs to be deleted they are preserved along with any access
 module containerIdentity 'modules/identity-module.bicep' = [for (environment, i) in environments: {

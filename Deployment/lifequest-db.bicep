@@ -2,9 +2,9 @@ param environment string
 
 targetScope = 'resourceGroup'
 
-resource dbIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
-  name: 'lifequest-${environment}-db'
-  location: resourceGroup().location
+resource dbIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-05-01-preview' existing = {
+  name: 'lifequest-db'
+  scope: resourceGroup('lifequest-shared')
 }
 
 resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
