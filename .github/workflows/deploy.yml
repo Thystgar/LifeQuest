@@ -120,7 +120,7 @@ jobs:
     - name: Run EF Core migrations
       working-directory: Server/LifeQuest.Api
       run: |
-        ls
+        export ASPNETCORE_ENVIRONMENT=test
         dotnet tool install --global dotnet-ef
         dotnet build
         export PATH="$PATH:/home/runner/.dotnet/tools"

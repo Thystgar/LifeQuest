@@ -1,5 +1,6 @@
 using LifeQuest.Api.Processors;
 using LifeQuest.Api.Storage;
+using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -17,7 +18,7 @@ namespace LifeQuest.Api
 		}
 
         public static IHostBuilder CreateHostBuilder(string[] args){
-            var builder = new HostBuilder();
+            var builder = Host.CreateDefaultBuilder();
 
             builder
                 .ConfigureAppConfiguration((context, config) =>
