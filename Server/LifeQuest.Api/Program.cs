@@ -2,7 +2,6 @@ using LifeQuest.Api.Processors;
 using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace LifeQuest.Api
 {
@@ -17,8 +16,8 @@ namespace LifeQuest.Api
 			app.Run();
 		}
 
-        public static IHostBuilder CreateHostBuilder(string[] args){
-            var builder = Host.CreateDefaultBuilder();
+        public static IWebHostBuilder CreateHostBuilder(string[] args){
+            var builder = WebHost.CreateDefaultBuilder();
 
             builder
                 .ConfigureAppConfiguration((context, config) =>
@@ -45,29 +44,25 @@ namespace LifeQuest.Api
                     services.AddEndpointsApiExplorer();
                     services.AddSwaggerGen();
                 })
-                .ConfigureWebHost(builder =>
+                .Configure((context, app) =>
                 {
-                    builder
-                    .Configure((context, app) =>
+                    var env = context.HostingEnvironment;
+
+                    if (env.IsDevelopment())
                     {
-                        var env = context.HostingEnvironment;
+                        app.UseSwagger();
+                        app.UseSwaggerUI();
+                    }
 
-                        if (env.IsDevelopment())
-                        {
-                            app.UseSwagger();
-                            app.UseSwaggerUI();
-                        }
-
-                        app.UseHttpsRedirection();
-                        app.UseRouting();
-                        app.UseAuthorization();
-                        app.UseEndpoints(endpoints =>
-                        {
-                            endpoints.MapControllers();
-                        });
-                    })
-                    .UseKestrel();
-                });
+                    app.UseHttpsRedirection();
+                    app.UseRouting();
+                    app.UseAuthorization();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapControllers();
+                    });
+                })
+                .UseKestrel();
                 
             return builder;
         }
