@@ -15,8 +15,7 @@ import { fetchAccount } from './shared/api';
 
 import QuestsTab from './tabs/quests';
 import RewardsTab from './tabs/rewards';
-import SettingsTab from './tabs/settings';
-import AccountTab from './tabs/account';
+import AccountHeader from './components/AccountHeader';
 
 enableScreens();
 
@@ -44,11 +43,13 @@ function App(): React.JSX.Element {
   return (
     <AccountContext.Provider value={account}>
       <NavigationContainer>
+        <AccountHeader />
         <Tab.Navigator>
           <Tab.Screen
             name="Quests"
             component={QuestsTab}
             options={{
+              headerShown: false,
               tabBarIcon: ({ color, size }) => (
                 <Image
                   source={require('./assets/images/quests.png')}
@@ -61,33 +62,10 @@ function App(): React.JSX.Element {
             name="Rewards"
             component={RewardsTab}
             options={{
+              headerShown: false,
               tabBarIcon: ({ color, size }) => (
                 <Image
                   source={require('./assets/images/rewards.png')}
-                  style={{ width: size, height: size, tintColor: color }}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={SettingsTab}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image
-                  source={require('./assets/images/settings.png')}
-                  style={{ width: size, height: size, tintColor: color }}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Account"
-            component={AccountTab}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image
-                  source={require('./assets/images/account.png')}
                   style={{ width: size, height: size, tintColor: color }}
                 />
               ),

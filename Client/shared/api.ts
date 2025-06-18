@@ -1,6 +1,6 @@
 import { Reward, Quest, Account } from './types';
 
-const BASE_URI = 'http://lifequest-dev.fxgqcnf5dvdneram.northeurope.azurecontainer.io:8080';
+const BASE_URI = 'http://localhost:8080';
 
 export const fetchQuests = async (): Promise<Quest[]> => {
     try {
@@ -25,6 +25,24 @@ export const completeQuest = async (id: string): Promise<void> => {
         }
     } catch (error) {
         console.error('Error completing quest:', error);
+        throw error;
+    }
+};
+
+export const addQuest = async (quest: Quest): Promise<void> => {
+    try {
+        const response = await fetch(`${BASE_URI}/quest`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(quest),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error adding quest:', error);
         throw error;
     }
 };

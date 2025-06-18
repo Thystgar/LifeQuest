@@ -3,17 +3,14 @@ import { View, Text, StyleSheet, Modal, TextInput, Button, TouchableOpacity, Tou
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { AccountContext } from '../App';
 import { fetchRewards, redeemReward, addReward, deleteReward } from '../shared/api';
-import { Reward } from '../shared/types';
+import { Reward, createReward } from '../shared/types';
 
 export default function RewardsTab() {
   const account = useContext(AccountContext);
 
   const [rewardItems, setRewardItems] = useState<Reward[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [rewardName, setRewardName] = useState('');
-  const [rewardPoints, setRewardPoints] = useState('');
-  const [rewardId, setRewardId] = useState<string | null>(null);
-
+  const [reward, setReward] = useState<Reward | null>(createReward());
   const fetchData = async () => {
     try {
       const data = await fetchRewards();
@@ -42,24 +39,9 @@ export default function RewardsTab() {
 
   const handleAddReward = async () => {
     try {
-      const newReward: Reward = {
-        id: '',
-        name: rewardName,
-        value: parseInt(rewardPoints, 10),
-        redeemed: false,
-        description: ''
-      };
-      await addReward(newReward);
-      await fetchData();
-      setModalVisible(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDeleteReward = async (id: string) => {
-    try {
-      await deleteReward(id);
+      if (reward) {
+        await addReward(reward);
+      }
       await fetchData();
       setModalVisible(false);
     } catch (error) {
@@ -68,17 +50,8 @@ export default function RewardsTab() {
   };
 
   const openModalForEdit = (reward: Reward) => {
-    resetModal();
-    setRewardId(reward.id);
-    setRewardName(reward.name);
-    setRewardPoints(reward.value.toString());
+    setReward(reward);
     setModalVisible(true);
-  };
-
-  const resetModal = () => {
-    setRewardId(null);
-    setRewardName('');
-    setRewardPoints('');
   };
 
   return (
@@ -116,7 +89,7 @@ export default function RewardsTab() {
       <TouchableOpacity
         style={styles.fab}
         onPress={() => {
-          resetModal();
+          setReward(createReward());
           setModalVisible(true);
         }}
       >
@@ -136,30 +109,28 @@ export default function RewardsTab() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalView}>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>×</Text>
-              </TouchableOpacity>
-              <Text style={styles.modalText}>{rewardId ? 'Edit Reward' : 'Add New Reward'}</Text>
+              <Text style={styles.modalText}>{'Add New Reward'}</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Name"
-                value={rewardName}
-                onChangeText={setRewardName}
+                value={reward?.name}
+                onChangeText={name => setReward(prev => prev ? { ...prev, name } : null)}
               />
               <TextInput
                 style={styles.input}
-                placeholder="Points"
-                value={rewardPoints}
-                onChangeText={setRewardPoints}
+                placeholder="Description"
+                value={reward?.description}
+                onChangeText={description => setReward(prev => prev ? { ...prev, description: description } : null)}
+                keyboardType="numeric"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Value"
+                value={reward?.value !== undefined && reward?.value !== 0 ? reward.value.toString() : ''}
+                onChangeText={points => setReward(prev => prev ? { ...prev, value: parseInt(points)} : null)}
                 keyboardType="numeric"
               />
               <View style={styles.buttonContainer}>
-                {rewardId && (
-                  <Button title="Delete" color="red" onPress={() => handleDeleteReward(rewardId)} />
-                )}
                 <Button title="Submit" onPress={ handleAddReward} />
               </View>
             </View>
@@ -222,23 +193,30 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingBottom: 60, // Adjust this value based on the height of your bottom menu
+    alignItems: 'flex-end',
+    paddingBottom: 0,
   },
   modalView: {
     width: '100%',
+    minHeight: 300,
+    maxHeight: '90%',
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 0, // No rounded corners
     padding: 35,
     alignItems: 'flex-start', // Align items to the left
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: -2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,},
+    elevation: 5,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
@@ -257,17 +235,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '90%',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    zIndex: 1,
-  },
-  closeButtonText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
   },
   modalOverlay: {
     flex: 1,

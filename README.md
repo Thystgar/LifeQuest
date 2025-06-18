@@ -27,6 +27,8 @@ Go to folder App and run
 	npm run android
 	```
 
+to run against local server use ``` adb reverse tcp:8080 tcp:8080 ```
+
 ## Server
 
 ### Setup DB migrations
