@@ -1,6 +1,6 @@
 import { Reward, Quest, Account } from './types';
 
-const BASE_URI = 'http://localhost:8080';
+const BASE_URI = 'http://lifequest-test.ckc9d6d7awaeakb5.northeurope.azurecontainer.io:8080';
 
 export const fetchQuests = async (): Promise<Quest[]> => {
     try {

@@ -65,9 +65,11 @@ export default function RewardsTab() {
             underlayColor={'#DDD'}
           >
             <View style={styles.rowFront}>
-              <Text style={[styles.item, item.redeemed && styles.completedItem]}>
-                {item.name} - {item.value} points
-              </Text>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.item, item.redeemed && styles.completedItem]}>{item.name}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+              </View>
+              <Text style={styles.value}>{item.value} points</Text>
             </View>
           </TouchableHighlight>
         )}
@@ -161,6 +163,18 @@ const styles = StyleSheet.create({
   completedItem: {
     textDecorationLine: 'line-through',
     color: 'green',
+  },
+  description: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 2,
+  },
+  value: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginLeft: 10,
+    alignSelf: 'center',
   },
   rowBack: {
     alignItems: 'center',
