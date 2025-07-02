@@ -58,6 +58,7 @@ namespace LifeQuest.Api
                                 .AddHttpClientInstrumentation();
                                 // .AddSqlClientInstrumentation(); // Uncomment if you want SQL telemetry
                         })
+                        .WithLogging()
                         .UseAzureMonitor(options =>
                         {
                             options.Credential = new DefaultAzureCredential();
@@ -66,10 +67,6 @@ namespace LifeQuest.Api
 
                     services.BuildServiceProvider().GetRequiredService<ILogger<Program>>()
                         .LogInformation("LifeQuest API is starting up.");
-                })
-                .ConfigureLogging((context, logging) =>
-                {
-                    logging.AddOpenTelemetry();
                 })
                 .Configure((context, app) =>
                 {
