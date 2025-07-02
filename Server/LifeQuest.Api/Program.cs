@@ -15,7 +15,10 @@ namespace LifeQuest.Api
 
 			var app = builder.Build();
 
-			app.Run();
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("LifeQuest API is starting up.");
+
+            app.Run();
 		}
 
         public static IWebHostBuilder CreateHostBuilder(string[] args){
@@ -41,6 +44,7 @@ namespace LifeQuest.Api
                     services.AddScoped<IAccountProcessor, AccountProcessor>();
                     services.AddScoped<IRewardProcessor, RewardProcessor>();
                     services.AddScoped<IQuestProcessor, QuestProcessor>();
+                    services.AddLogging();
 
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                     services.AddEndpointsApiExplorer();
@@ -50,10 +54,16 @@ namespace LifeQuest.Api
                         options.Credential = new DefaultAzureCredential();
                         options.ConnectionString = "InstrumentationKey=ad65f563-d9d6-47b3-bb77-2a32b9a42cca;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=5dcab56d-7fa7-4385-b7ee-7af600a775fd";
                     });
+
+                    services.BuildServiceProvider().GetRequiredService<ILogger<Program>>()
+                        .LogInformation("LifeQuest API is starting up.");
                 })
                 .Configure((context, app) =>
                 {
                     var env = context.HostingEnvironment;
+
+                    app.ApplicationServices.GetRequiredService<ILogger<Program>>()
+                        .LogInformation($"Configuring LifeQuest API middleware for environment {env}.");
 
                     if (env.IsDevelopment())
                     {
@@ -68,6 +78,10 @@ namespace LifeQuest.Api
                     {
                         endpoints.MapControllers();
                     });
+
+                    app.ApplicationServices.GetRequiredService<ILogger<Program>>()
+                        .LogInformation($"Configured LifeQuest API middleware for environment {env}.");
+
                 })
                 .UseKestrel();
                 
