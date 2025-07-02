@@ -52,6 +52,10 @@ module acrModule 'modules/acr-module.bicep' = {
   }
 }
 
+//create app insights
+//add access to container identity
+// add access to log analytics for container identity
+
 targetScope = 'subscription'
 
 

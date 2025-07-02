@@ -2,6 +2,8 @@ using LifeQuest.Api.Processors;
 using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Azure.Identity;
 
 namespace LifeQuest.Api
 {
@@ -43,6 +45,11 @@ namespace LifeQuest.Api
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                     services.AddEndpointsApiExplorer();
                     services.AddSwaggerGen();
+                    services.AddOpenTelemetry().UseAzureMonitor(options =>
+                    {
+                        options.Credential = new DefaultAzureCredential();
+                        options.ConnectionString = "InstrumentationKey=ad65f563-d9d6-47b3-bb77-2a32b9a42cca;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=5dcab56d-7fa7-4385-b7ee-7af600a775fd";
+                    });
                 })
                 .Configure((context, app) =>
                 {
