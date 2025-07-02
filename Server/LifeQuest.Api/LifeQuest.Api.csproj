@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>bc63da8f-be98-4ec8-a833-772d06d0eaf9</UserSecretsId>
+    <ContainerPort>8080</ContainerPort>
   </PropertyGroup>
 
   <ItemGroup>
