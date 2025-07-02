@@ -20,7 +20,6 @@ namespace LifeQuest.Api.Controllers
         public async Task<ActionResult<IEnumerable<QuestApiModel>>> GetQuestsAsync()
         {
             var quests = await _questProcessor.GetQuestsAsync();
-
             return Ok(quests);
         }
 
@@ -28,7 +27,6 @@ namespace LifeQuest.Api.Controllers
         public async Task<ActionResult<QuestApiModel>> CompleteQuestAsync(string questId)
         {
             var quest = await _questProcessor.CompleteQuestAsync(USER, questId);
-
             return Ok(quest);
         }
     }
