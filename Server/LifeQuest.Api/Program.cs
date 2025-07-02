@@ -67,9 +67,14 @@ namespace LifeQuest.Api
                     services.BuildServiceProvider().GetRequiredService<ILogger<Program>>()
                         .LogInformation("LifeQuest API is starting up.");
                 })
+                .ConfigureLogging((context, logging) =>
+                {
+                    logging.AddOpenTelemetry();
+                })
                 .Configure((context, app) =>
                 {
                     var env = context.HostingEnvironment;
+
                     app.ApplicationServices.GetRequiredService<ILogger<Program>>()
                         .LogInformation($"Configuring LifeQuest API middleware for environment {env}.");
 
