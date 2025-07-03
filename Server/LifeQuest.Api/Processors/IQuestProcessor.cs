@@ -6,5 +6,6 @@ namespace LifeQuest.Api.Processors
     {
         Task<IEnumerable<QuestApiModel>> GetQuestsAsync();
         Task<QuestApiModel> CompleteQuestAsync(string userId, string questId);
+        Task AddQuestAsync(QuestApiModel quest);
     }
 }

@@ -27,5 +27,11 @@ namespace LifeQuest.Api.Processors
             await _account.AddPointsAsync(userId, quest.Value);
             return quest.ToApiModel();
         }
+
+        public async Task AddQuestAsync(QuestApiModel quest)
+        {
+            var storageQuest = quest.ToStorageModel();
+            await _storage.AddQuestAsync(storageQuest);
+        }
     }
 }

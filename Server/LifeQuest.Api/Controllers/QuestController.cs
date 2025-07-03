@@ -33,5 +33,12 @@ namespace LifeQuest.Api.Controllers
             var quest = await _questProcessor.CompleteQuestAsync(USER, questId);
             return Ok(quest);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddQuestAsync([FromBody] QuestApiModel quest)
+        {
+            await _questProcessor.AddQuestAsync(quest);
+            return Ok();
+        }
     }
 }
