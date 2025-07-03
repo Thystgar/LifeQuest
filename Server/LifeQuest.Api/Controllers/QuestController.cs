@@ -35,10 +35,30 @@ namespace LifeQuest.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestAsync([FromBody] QuestApiModel quest)
+        public async Task<ActionResult<QuestApiModel>> AddQuestAsync([FromBody] QuestApiModel quest)
         {
+            if (quest == null)
+            {
+                return BadRequest("Quest cannot be null.");
+            }
+
+            if (quest.Value <= 0)
+            {
+                return BadRequest("Quest value must be greater than zero.");
+            }
+
+            if (string.IsNullOrWhiteSpace(quest.Name))
+            {
+                return BadRequest("Quest name cannot be empty.");
+            }
+
+            if (string.IsNullOrWhiteSpace(quest.Description))
+            {
+                return BadRequest("Quest description cannot be empty.");
+            }
+
             await _questProcessor.AddQuestAsync(quest);
-            return Ok();
+            return Ok(quest);
         }
     }
 }
