@@ -39,6 +39,7 @@ namespace LifeQuest.Api
                 .ConfigureServices((context, services) =>
                 {
                     var connectionString = context.Configuration.GetValue<string>("Database:ConnectionString");
+                    var azureMonitorConnectionString = context.Configuration.GetValue<string>("AzureMonitor:ConnectionString");
 
                     services.AddControllers();
                     services.AddDbContext<LifeQuestContext>(options => options.UseSqlServer(connectionString));
@@ -65,7 +66,7 @@ namespace LifeQuest.Api
                         .UseAzureMonitor(options =>
                         {
                             options.Credential = new DefaultAzureCredential();
-                            options.ConnectionString = "InstrumentationKey=ad65f563-d9d6-47b3-bb77-2a32b9a42cca;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=5dcab56d-7fa7-4385-b7ee-7af600a775fd";
+                            options.ConnectionString = azureMonitorConnectionString;
                         });
                 })
                 .Configure((context, app) =>
