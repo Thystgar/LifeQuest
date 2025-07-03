@@ -31,6 +31,7 @@ namespace LifeQuest.Api.Processors
         public async Task AddQuestAsync(QuestApiModel quest)
         {
             var storageQuest = quest.ToStorageModel();
+            storageQuest.Id = Guid.NewGuid().ToString();
             await _storage.AddQuestAsync(storageQuest);
         }
     }

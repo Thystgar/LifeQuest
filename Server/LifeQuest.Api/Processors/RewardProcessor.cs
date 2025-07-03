@@ -24,6 +24,7 @@ namespace LifeQuest.Api.Processors
         public async Task AddRewardAsync(RewardApiModel reward)
         {
             var storageReward = reward.ToStorageModel();
+            storageReward.Id = Guid.NewGuid().ToString();
             await _storage.AddRewardAsync(storageReward);
         }
 
