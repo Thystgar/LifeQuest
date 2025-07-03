@@ -40,7 +40,7 @@ export function createQuest(
   name: string = '',
   description: string = '',
   value: number = 0,
-  status: QuestStatus = QuestStatus.Accepted
+  status: QuestStatus = QuestStatus.Active
 ): Quest {
   return { id, name, description, value, status };
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Azure.Identity;
 using OpenTelemetry.Trace;
+using System.Text.Json.Serialization;
 
 namespace LifeQuest.Api
 {
@@ -41,7 +42,11 @@ namespace LifeQuest.Api
                     var connectionString = context.Configuration.GetValue<string>("Database:ConnectionString");
                     var azureMonitorConnectionString = context.Configuration.GetValue<string>("AzureMonitor:ConnectionString");
 
-                    services.AddControllers();
+                    services.AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    });
                     services.AddDbContext<LifeQuestContext>(options => options.UseSqlServer(connectionString));
                     services.AddScoped<IQuestStorage, QuestDbStorage>();
                     services.AddScoped<IRewardStorage, RewardDbStorage>();
