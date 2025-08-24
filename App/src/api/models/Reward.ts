@@ -18,14 +18,4 @@ export class Reward {
         this.value = value;
         this.redeemed = redeemed;
     }
-
-    static create(
-        id: string = '',
-        name: string = '',
-        description: string = '',
-        value: number = 0,
-        redeemed: boolean = false
-    ): Reward {
-        return new Reward(id, name, description, value, redeemed);
-    }
 }

@@ -1,10 +1,19 @@
-import { Account, Quest, Reward } from '../models';
+
+import { Account, Quest, Reward } from '.';
 
 const BASE_URI = 'http://10.0.2.2:8080';
 
-export const fetchQuests = async (): Promise<Quest[]> => {
+// Helper to add Authorization header if accessToken is provided
+const getAuthHeader = (accessToken?: string) =>
+  accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined;
+
+export const fetchQuests = async (accessToken?: string): Promise<Quest[]> => {
     try {
-        const response = await fetch(`${BASE_URI}/quest`);
+        console.log('Fetching quests with access token:', accessToken);
+        const headers: Record<string, string> = getAuthHeader(accessToken) || {};
+        const response = await fetch(`${BASE_URI}/quest`, {
+            headers,
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -15,10 +24,12 @@ export const fetchQuests = async (): Promise<Quest[]> => {
     }
 };
 
-export const completeQuest = async (id: string): Promise<void> => {
+export const completeQuest = async (id: string, accessToken?: string): Promise<void> => {
     try {
+        const headers: Record<string, string> = getAuthHeader(accessToken) || {};
         const response = await fetch(`${BASE_URI}/quest/${id}/complete`, {
             method: 'PUT',
+            headers,
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -29,13 +40,15 @@ export const completeQuest = async (id: string): Promise<void> => {
     }
 };
 
-export const addQuest = async (quest: Quest): Promise<void> => {
+export const addQuest = async (quest: Quest, accessToken?: string): Promise<void> => {
     try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(getAuthHeader(accessToken) || {}),
+        };
         const response = await fetch(`${BASE_URI}/quest`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(quest),
         });
         if (!response.ok) {
@@ -47,9 +60,12 @@ export const addQuest = async (quest: Quest): Promise<void> => {
     }
 };
 
-export const fetchRewards = async (): Promise<Reward[]> => {
+export const fetchRewards = async (accessToken?: string): Promise<Reward[]> => {
     try {
-        const response = await fetch(`${BASE_URI}/reward`);
+        const headers: Record<string, string> = getAuthHeader(accessToken) || {};
+        const response = await fetch(`${BASE_URI}/reward`, {
+            headers,
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -60,10 +76,12 @@ export const fetchRewards = async (): Promise<Reward[]> => {
     }
 };
 
-export const redeemReward = async (id: string): Promise<void> => {
+export const redeemReward = async (id: string, accessToken?: string): Promise<void> => {
     try {
+        const headers: Record<string, string> = getAuthHeader(accessToken) || {};
         const response = await fetch(`${BASE_URI}/reward/${id}/redeem`, {
             method: 'PUT',
+            headers,
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -74,13 +92,15 @@ export const redeemReward = async (id: string): Promise<void> => {
     }
 };
 
-export const addReward = async (reward: Reward): Promise<void> => {
+export const addReward = async (reward: Reward, accessToken?: string): Promise<void> => {
     try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(getAuthHeader(accessToken) || {}),
+        };
         const response = await fetch(`${BASE_URI}/reward`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(reward),
         });
         if (!response.ok) {
@@ -92,10 +112,12 @@ export const addReward = async (reward: Reward): Promise<void> => {
     }
 };
 
-export const deleteReward = async (id: string): Promise<void> => {
+export const deleteReward = async (id: string, accessToken?: string): Promise<void> => {
     try {
+        const headers: Record<string, string> = getAuthHeader(accessToken) || {};
         const response = await fetch(`${BASE_URI}/rewards?id=${id}`, {
             method: 'DELETE',
+            headers,
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -106,9 +128,13 @@ export const deleteReward = async (id: string): Promise<void> => {
     }
 };
 
-export const fetchAccount = async (id: string): Promise<Account> => {
+export const fetchAccount = async (accessToken?: string): Promise<Account> => {
     try {
-        const response = await fetch(`${BASE_URI}/account/${id}`);
+        console.log('Fetching account with access token:', accessToken);
+        const headers: Record<string, string> = getAuthHeader(accessToken) || {};
+        const response = await fetch(`${BASE_URI}/account`, {
+            headers,
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

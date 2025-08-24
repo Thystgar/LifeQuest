@@ -24,14 +24,4 @@ export class Quest {
         this.value = value;
         this.status = status;
     }
-
-    static create(
-        id: string = '',
-        name: string = '',
-        description: string = '',
-        value: number = 0,
-        status: QuestStatus = QuestStatus.Active
-    ): Quest {
-        return new Quest(id, name, description, value, status);
-    }
 }
