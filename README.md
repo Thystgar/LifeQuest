@@ -18,16 +18,13 @@ Before you begin, ensure you have met the following requirements:
 
 ## App
 
-### Create app
-Create initial app using ```npx @react-native-community/cli init lifequest```
-
 ### Run locally
 Go to folder App and run
 	```sh
 	npm run android
+	npx expo run:android // react native
+	npx expo start --android // expo go
 	```
-
-to run against local server use ``` adb reverse tcp:8080 tcp:8080 ```
 
 ## Server
 
