@@ -6,6 +6,9 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Azure.Identity;
 using OpenTelemetry.Trace;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 namespace LifeQuest.Api
 {
@@ -73,6 +76,12 @@ namespace LifeQuest.Api
                             options.Credential = new DefaultAzureCredential();
                             options.ConnectionString = azureMonitorConnectionString;
                         });
+                    services
+                        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                        .AddMicrosoftIdentityWebApi(context.Configuration.GetSection("AzureAd"));
+
+                    services.AddAuthorization();
+
                 })
                 .Configure((context, app) =>
                 {
@@ -86,7 +95,10 @@ namespace LifeQuest.Api
 
                     app.UseHttpsRedirection();
                     app.UseRouting();
+
+                    app.UseAuthentication();
                     app.UseAuthorization();
+
                     app.UseEndpoints(endpoints =>
                     {
                         endpoints.MapControllers();

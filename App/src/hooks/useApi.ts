@@ -14,16 +14,16 @@ import {
 
 export function useApi() {
   const user = useContext(AuthContext);
-  const accessToken = user?.accessToken;
+  const code = user?.code;
 
   return {
-    fetchQuests: () => fetchQuests(accessToken),
-    completeQuest: (id: string) => completeQuest(id, accessToken),
-    addQuest: (quest: Quest) => addQuest(quest, accessToken),
-    fetchRewards: () => fetchRewards(accessToken),
-    redeemReward: (id: string) => redeemReward(id, accessToken),
-    addReward: (reward: Reward) => addReward(reward, accessToken),
-    deleteReward: (id: string) => deleteReward(id, accessToken),
-    fetchAccount: () => fetchAccount(accessToken),
+    fetchQuests: () => fetchQuests(code),
+    completeQuest: (id: string) => completeQuest(id, code),
+    addQuest: (quest: Quest) => addQuest(quest, code),
+    fetchRewards: () => fetchRewards(code),
+    redeemReward: (id: string) => redeemReward(id, code),
+    addReward: (reward: Reward) => addReward(reward, code),
+    deleteReward: (id: string) => deleteReward(id, code),
+    fetchAccount: () => fetchAccount(code),
   };
 }

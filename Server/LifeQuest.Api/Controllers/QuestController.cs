@@ -1,10 +1,12 @@
 using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace LifeQuest.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class QuestController : ControllerBase

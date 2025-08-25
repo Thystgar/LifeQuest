@@ -1,24 +1,18 @@
 {
   "expo": {
-    "name": "LifeQuest",
-    "slug": "LifeQuest",
+    "name": "lifequest",
+    "slug": "lifequest",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/assets/images/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "scheme": "lifequest",
+    "scheme": "com.lifequest",
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "src/assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "favicon": "src/assets/images/favicon.png"
+      "package": "com.anonymous.LifeQuest"
     },
     "plugins": [
       "expo-asset",

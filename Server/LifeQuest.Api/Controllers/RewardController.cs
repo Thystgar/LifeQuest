@@ -1,9 +1,11 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LifeQuest.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class RewardController : ControllerBase

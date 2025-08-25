@@ -1,6 +1,13 @@
 import React from 'react';
-import type { AuthorizeResult } from 'react-native-app-auth';
 
-const AuthContext = React.createContext<AuthorizeResult | null>(null);
+// Custom authorization context class
+export class Authorization {
+	code: string;
+	constructor(code: string) {
+		this.code = code;
+	}
+}
+
+const AuthContext = React.createContext<Authorization | null>(null);
 
 export default AuthContext;

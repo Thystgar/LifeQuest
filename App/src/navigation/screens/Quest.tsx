@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { Quest, QuestStatus, useApi } from '../../api';
+import { Quest, QuestStatus } from '../../api';
+import { useApi } from '../../hooks/useApi';
 import { AuthContext } from '../../contexts';
 
 export default function QuestsTab() {
