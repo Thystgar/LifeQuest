@@ -52,7 +52,7 @@ export function App(): React.JSX.Element {
   };
   
   const redirectUri = Constants.executionEnvironment == 'storeClient' 
-    ? AuthSession.makeRedirectUri({ scheme: 'exp' }) // expo go
+    ? AuthSession.makeRedirectUri() // expo go
     : AuthSession.makeRedirectUri({ native: config.redirectUrl }); // react-native
     
   const authRequestConfig = {

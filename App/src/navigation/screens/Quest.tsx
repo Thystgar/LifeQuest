@@ -42,6 +42,7 @@ export default function QuestsTab() {
   };
 
   const handleAddQuest = async () => {
+    console.log('Adding quest:', quest);
     try {
       if (quest) {
         await addQuest(quest);
@@ -99,7 +100,7 @@ export default function QuestsTab() {
               <TouchableOpacity
                 style={styles.modalOverlay}
                 activeOpacity={1}
-                onPressOut={() => setModalVisible(false)}
+               // onPressOut={() => setModalVisible(false)}
               >
                 <View style={styles.modalContainer}>
                   <View style={styles.modalView}>
@@ -115,7 +116,6 @@ export default function QuestsTab() {
                       placeholder="Description"
                       value={quest?.description}
                       onChangeText={description => setQuest(prev => prev ? { ...prev, description: description } : null)}
-                      keyboardType="numeric"
                     />
                     <TextInput
                       style={styles.input}
