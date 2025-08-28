@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
+import { useAccount } from '@/hooks/useAccount';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
-import { AccountContext } from '../contexts';
 
 const AccountHeader: React.FC = () => {
-    const account = useContext(AccountContext);
+    const { account } = useAccount();
     const [menuVisible, setMenuVisible] = useState(false);
     // Compute initials from account name
     const getInitials = (name: string | undefined) => {

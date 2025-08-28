@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { Quest, QuestStatus } from '../../api';
-import { useApi } from '../../hooks/useApi';
-import { AuthContext } from '../../contexts';
+import { Quest, QuestStatus } from '@/api';
+import { useApi } from '@/hooks/useApi';
+import { useAccount } from '@/hooks/useAccount';
 
 export default function QuestsTab() {
-  const user = useContext(AuthContext);
   
   const { fetchQuests, completeQuest, addQuest } = useApi();
+  const { account } = useAccount();
 
   const [quests, setQuests] = useState<Quest[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -16,7 +16,7 @@ export default function QuestsTab() {
 
   useEffect(() => {
     fetchData();
-  }, [user]);
+  }, [account]);
 
   const fetchData = async () => {
     try {

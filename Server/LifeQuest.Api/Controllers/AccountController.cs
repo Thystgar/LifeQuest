@@ -20,7 +20,13 @@ namespace LifeQuest.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<AccountApiModel>> GetAccountAsync() 
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            var userId = User.FindFirst("preferred_username")?.Value;
+
+            if (userId == null)
+            {
+                return BadRequest("Username null");
+            }
+
             var account = await _accountProcessor.GetAccountAsync(userId);
             return Ok(account);
         }

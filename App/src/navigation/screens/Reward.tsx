@@ -1,17 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { AccountContext, AuthContext } from '../../contexts';
-import { Reward } from '../../api';
-import { useApi } from '../../hooks/useApi';
+import { Reward } from '@/api';
+import { useApi } from '@/hooks/useApi';
+import { useAccount } from '@/hooks/useAccount';
 
 export default function RewardsTab() {
-  // global context
-  const account = useContext(AccountContext);
-  const user = useContext(AuthContext);
-  // You can now use user?.code if needed for API calls
-
-  // import stuff from hooks
+  const { account } = useAccount();
   const { redeemReward, addReward, fetchRewards } = useApi();
 
   // local data
@@ -22,7 +17,7 @@ export default function RewardsTab() {
   // get data when user is logged in
   useEffect(() => {
     fetchData();
-  }, [user]);
+  }, [account]);
 
   const fetchData = async () => {
     try {
