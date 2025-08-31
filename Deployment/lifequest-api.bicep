@@ -11,6 +11,30 @@ resource logsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' exi
   scope: resourceGroup('lifequest-shared')
 }
 
+resource keyVault 'Microsoft.KeyVault/vaults@2024-12-01-preview' = {
+  name: 'lifequest-${environment}-kv'
+  location: resourceGroup().location
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: subscription().tenantId
+  }
+}
+
+
+resource container_identity_access 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(keyVault.id, containerIdentity.id, 'db79e9a7-68ee-4b58-9aeb-b90e7c24fcba')
+  scope: keyVault
+  properties: {
+    principalId: containerIdentity.properties.principalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'db79e9a7-68ee-4b58-9aeb-b90e7c24fcba')
+    principalType: 'ServicePrincipal'
+  }
+}
+
+
 resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-preview' = {
   name: 'lifequest-${environment}-container'
   location: resourceGroup().location

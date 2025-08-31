@@ -1,0 +1,30 @@
+$CertName = "lifequest.website"
+$INFPath = "D:\LifeQuest\Deployment\CSR\$CertName.inf"
+$CSRPath = "D:\LifeQuest\Deployment\CSR\$CertName.req"
+
+$INF = @"
+[Version]
+Signature="$Windows NT$"
+
+[NewRequest]
+Subject = "CN=$CertName, O=T&Q, OU=IT, L=Dublin, S=Leinster, C=IE"
+KeySpec = 1
+KeyLength = 2048
+Exportable = TRUE
+MachineKeySet = TRUE
+SMIME = FALSE
+PrivateKeyArchive = FALSE
+UserProtected = FALSE
+UseExistingKeySet = FALSE
+ProviderName = "Microsoft RSA SChannel Cryptographic Provider"
+ProviderType = 12
+RequestType = PKCS10
+KeyUsage = 0xa0
+
+[EnhancedKeyUsageExtension]
+OID=1.3.6.1.5.5.7.3.1 ; Server Authentication
+"@
+
+# Save the INF file
+New-Item -ItemType Directory -Path "C:\CSR" -Force
+$INF | Out-File -FilePath $INFPath -Encoding ascii
