@@ -1,9 +1,12 @@
 import { useAccount } from '@/hooks/useAccount';
+import { useAuth } from '@/hooks/useAuth';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, Button } from 'react-native';
 
 const AccountHeader: React.FC = () => {
     const { account } = useAccount();
+    const { signOut } = useAuth();
+
     const [menuVisible, setMenuVisible] = useState(false);
     // Compute initials from account name
     const getInitials = (name: string | undefined) => {
@@ -56,6 +59,9 @@ const AccountHeader: React.FC = () => {
                                 <TouchableOpacity style={styles.menuItem} onPress={() => { setMenuVisible(false); /* handle settings navigation here */ }}>
                                     <Text style={styles.menuItemText}>Settings</Text>
                                 </TouchableOpacity>
+                                <View style={styles.menuItem}>
+                                    <Button title="Sign out" onPress={signOut} />
+                                </View>
                             </View>
                         </View>
                     </Modal>

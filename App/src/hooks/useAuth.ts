@@ -9,16 +9,16 @@ import { useAuthContext } from '@/contexts/AuthContext';
 export function useAuth() {
     const { auth, setAuth } = useAuthContext();
 
-//     useEffect(() => {
-//         const logger = setInterval(() => {
-//             console.log('Current access token:', accessToken);
-//         }, 1000);
-//         return () => clearInterval(logger); // Cleanup on unmount
-//     }, [accessToken]);
+    //     useEffect(() => {
+    //         const logger = setInterval(() => {
+    //             console.log('Current access token:', accessToken);
+    //         }, 1000);
+    //         return () => clearInterval(logger); // Cleanup on unmount
+    //     }, [accessToken]);
 
-//     useEffect(() => {
-//   console.log('useAuth mounted');
-// }, []);
+    //     useEffect(() => {
+    //   console.log('useAuth mounted');
+    // }, []);
 
 
     const config = {
@@ -54,10 +54,48 @@ export function useAuth() {
     };
 
     const [request, response, promptAsync] = AuthSession.useAuthRequest(authRequestConfig, discovery);
+    const handleTokenExchange = async () => {
+        if (response?.type === 'success' && response?.params?.code && request?.codeVerifier) {
+            const body = {
+                code: response.params.code,
+                grant_type: "authorization_code",
+                client_id: config.clientId,
+                redirect_uri: redirectUri,
+                code_verifier: request?.codeVerifier,
+            };
+
+            await fetch("https://cb6668ea-6846-40df-936d-1dbd5deadc52.ciamlogin.com/cb6668ea-6846-40df-936d-1dbd5deadc52/oauth2/v2.0/token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams(body).toString(),
+            })
+                .then(async (resp) => await resp.json())
+                .then((resp) => {
+                    console.log("Access Token Response:", resp);
+                    if (resp.access_token) {
+                        setAuth(resp.access_token);
+                        console.log("Access Token set 1:", auth);
+                    } else {
+                        setAuth(null);
+                        console.log("Access Token set 2:", null);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Token exchange error:', error);
+                });
+        };
+    }
 
     const signIn = async () => {
         try {
-            await promptAsync();
+            await promptAsync()
+            .then(handleTokenExchange)
+            .then(() => {
+                console.log("Authentication successful");
+                console.log("Access Token:", auth);
+            })
         } catch (error) {
             console.error('Authentication error:', error);
             // setAccessToken(null);
@@ -65,42 +103,9 @@ export function useAuth() {
         }
     };
 
-    React.useEffect(() => {
-        const handleTokenExchange = async () => {
-            if (response?.type === 'success' && response?.params?.code && request?.codeVerifier) {
-                const body = {
-                    code: response.params.code,
-                    grant_type: "authorization_code",
-                    client_id: config.clientId,
-                    redirect_uri: redirectUri,
-                    code_verifier: request?.codeVerifier,
-                };
-
-                fetch("https://cb6668ea-6846-40df-936d-1dbd5deadc52.ciamlogin.com/cb6668ea-6846-40df-936d-1dbd5deadc52/oauth2/v2.0/token", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: new URLSearchParams(body).toString(),
-                })
-                    .then((resp) => resp.json())
-                    .then((resp) => {
-                        console.log("Access Token Response:", resp);
-                        if (resp.access_token) {
-                            setAuth(resp.access_token);
-                            console.log("Access Token set 1:", auth);
-                        } else {
-                            setAuth(null);
-                            console.log("Access Token set 2:", null);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Token exchange error:', error);
-                    });
-            };
-        }
-        handleTokenExchange();
-    }, [response]);
+    // React.useEffect(() => {
+    //     handleTokenExchange();
+    // }, [response]);
 
 
     const signOut = async () => {

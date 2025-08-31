@@ -1,7 +1,10 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web;
+using System.Security.Claims;
 
 namespace LifeQuest.Api.Controllers
 {
@@ -20,7 +23,11 @@ namespace LifeQuest.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<AccountApiModel>> GetAccountAsync() 
         {
-            var userId = User.FindFirst("preferred_username")?.Value;
+            // http://schemas.microsoft.com/identity/claims/objectidentifier - id
+            // preferred_username - email
+            // name - display name
+            // http://schemas.microsoft.com/identity/claims/scope - api scope (we only have user now)
+            var userId = User.FindFirst(ClaimConstants.ObjectId)?.Value;
 
             if (userId == null)
             {

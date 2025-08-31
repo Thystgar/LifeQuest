@@ -18,7 +18,7 @@ enableScreens();
 const Tab = createBottomTabNavigator();
 
 export function App(): React.JSX.Element {
-  const { signIn, signOut, isUserAuthenticated } = useAuth();
+  const { signIn, isUserAuthenticated } = useAuth();
 
   return (
     <NavigationContainer>
@@ -30,7 +30,6 @@ export function App(): React.JSX.Element {
       ) : (
         <>
           <AccountHeader />
-          <Button title="Sign out" onPress={signOut} />
           <Tab.Navigator>
             <Tab.Screen
               name="Quests"
