@@ -15,7 +15,7 @@ namespace LifeQuest.Api.Storage
         }
 
 
-        public Task<string> GetUserId()
+        public string GetUserId()
         {
             if (_httpContextAccessor.HttpContext == null){ 
                 throw new NullReferenceException("HTTP context is null.");
@@ -29,7 +29,7 @@ namespace LifeQuest.Api.Storage
                 throw new NullReferenceException("User ID not found in token.");
             }
 
-            return Task.FromResult(UserId);
+            return UserId;
         }
     }
 }

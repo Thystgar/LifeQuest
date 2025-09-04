@@ -25,7 +25,7 @@ namespace LifeQuest.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<QuestApiModel>>> GetQuestsAsync()
         {
-            var userId = await _userContext.GetUserId();
+            var userId = _userContext.GetUserId();
             _logger.LogInformation("Getting all quests for user {UserId}", userId);
             var quests = await _questProcessor.GetQuestsAsync();
             return Ok(quests);
@@ -34,7 +34,7 @@ namespace LifeQuest.Api.Controllers
         [HttpPut("{questId}/complete")]
         public async Task<ActionResult<QuestApiModel>> CompleteQuestAsync(string questId)
         {
-            var userId = await _userContext.GetUserId();
+            var userId = _userContext.GetUserId();
             var quest = await _questProcessor.CompleteQuestAsync(userId, questId);
             return Ok(quest);
         }

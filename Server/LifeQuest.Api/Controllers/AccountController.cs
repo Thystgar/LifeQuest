@@ -1,10 +1,8 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
-using System.Security.Claims;
 
 namespace LifeQuest.Api.Controllers
 {

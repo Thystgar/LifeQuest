@@ -31,7 +31,7 @@ namespace LifeQuest.Api.Controllers
         [HttpPut("{rewardId}/redeem")]
         public async Task<ActionResult<RewardApiModel>> RedeemRewardAsync(string rewardId)
         {
-            var userId = await _userContext.GetUserId();
+            var userId = _userContext.GetUserId();
             var reward = await _rewardProcessor.RedeemRewardAsync(userId, rewardId);
 
             return Ok(reward);

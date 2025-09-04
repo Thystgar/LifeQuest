@@ -57,6 +57,7 @@ namespace LifeQuest.Api
                     services.AddScoped<IAccountProcessor, AccountProcessor>();
                     services.AddScoped<IRewardProcessor, RewardProcessor>();
                     services.AddScoped<IQuestProcessor, QuestProcessor>();
+                    services.AddScoped<IUserContext, UserContext>();
                     services.AddLogging();
 
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

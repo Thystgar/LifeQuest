@@ -2,6 +2,6 @@
 {
     public interface IUserContext
     {
-        Task<string> GetUserId();
+        string GetUserId();
     }
 }
