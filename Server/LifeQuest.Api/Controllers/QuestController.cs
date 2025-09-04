@@ -1,8 +1,8 @@
 using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
+using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace LifeQuest.Api.Controllers
 {
@@ -13,18 +13,20 @@ namespace LifeQuest.Api.Controllers
     {
         private readonly IQuestProcessor _questProcessor;
         private readonly ILogger<QuestController> _logger;
-        private const string USER = "userIdTBD"; // TODO: Replace with actual user ID retrieval logic
+        private readonly IUserContext _userContext;
 
-        public QuestController(IQuestProcessor questProcessor, ILogger<QuestController> logger)
+        public QuestController(IQuestProcessor questProcessor, ILogger<QuestController> logger, IUserContext userContext)
         {
             _questProcessor = questProcessor;
             _logger = logger;
+            _userContext = userContext;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<QuestApiModel>>> GetQuestsAsync()
         {
-            _logger.LogInformation("Getting all quests for user {UserId}", USER);
+            var userId = await _userContext.GetUserId();
+            _logger.LogInformation("Getting all quests for user {UserId}", userId);
             var quests = await _questProcessor.GetQuestsAsync();
             return Ok(quests);
         }
@@ -32,7 +34,8 @@ namespace LifeQuest.Api.Controllers
         [HttpPut("{questId}/complete")]
         public async Task<ActionResult<QuestApiModel>> CompleteQuestAsync(string questId)
         {
-            var quest = await _questProcessor.CompleteQuestAsync(USER, questId);
+            var userId = await _userContext.GetUserId();
+            var quest = await _questProcessor.CompleteQuestAsync(userId, questId);
             return Ok(quest);
         }
 

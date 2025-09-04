@@ -1,5 +1,6 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
+using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,12 @@ namespace LifeQuest.Api.Controllers
     public class RewardController : ControllerBase
     {
         private readonly IRewardProcessor _rewardProcessor;
-        private const string USER = "userIdTBD"; // TODO: Replace with actual user ID retrieval logic
+        private readonly IUserContext _userContext;
 
-        public RewardController(IRewardProcessor rewardProcessor)
+        public RewardController(IRewardProcessor rewardProcessor, IUserContext userContext)
         {
             _rewardProcessor = rewardProcessor;
+            _userContext = userContext;
         }
 
         [HttpGet]
@@ -29,7 +31,8 @@ namespace LifeQuest.Api.Controllers
         [HttpPut("{rewardId}/redeem")]
         public async Task<ActionResult<RewardApiModel>> RedeemRewardAsync(string rewardId)
         {
-            var reward = await _rewardProcessor.RedeemRewardAsync(USER, rewardId);
+            var userId = await _userContext.GetUserId();
+            var reward = await _rewardProcessor.RedeemRewardAsync(userId, rewardId);
 
             return Ok(reward);
         }
