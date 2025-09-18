@@ -11,7 +11,8 @@ namespace LifeQuest.Api.Models.Mappers
             {
                 Id = storageModel.Id,
                 Name = storageModel.Name,
-                Points = storageModel.Points
+                Points = storageModel.Points,
+                GroupId = storageModel.GroupId
             };
         }
 
@@ -21,7 +22,8 @@ namespace LifeQuest.Api.Models.Mappers
             {
                 Id = apiModel.Id,
                 Name = apiModel.Name,
-                Points = apiModel.Points
+                Points = apiModel.Points, 
+                GroupId = apiModel.GroupId
             };
         }
     }

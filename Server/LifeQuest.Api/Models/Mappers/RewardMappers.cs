@@ -13,7 +13,8 @@ namespace LifeQuest.Api.Models.Mappers
                 Name = storageModel.Name,
                 Description = storageModel.Description,
                 Value = storageModel.Value,
-                Redeemed = storageModel.Redeemed
+                Redeemed = storageModel.Redeemed,
+                GroupId = storageModel.GroupId
             };
         }
 
@@ -25,7 +26,8 @@ namespace LifeQuest.Api.Models.Mappers
                 Name = apiModel.Name,
                 Description = apiModel.Description,
                 Value = apiModel.Value,
-                Redeemed = apiModel.Redeemed
+                Redeemed = apiModel.Redeemed,
+                GroupId = apiModel.GroupId
             };
         }
     }

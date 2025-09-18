@@ -9,6 +9,7 @@ namespace LifeQuest.Api.Models.API
         public required string Description { get; set; }
         public required int Value { get; set; }
         public required QuestStatusApiEnum Status { get; set; }
+        public required string GroupId { get; set; }
     }
 
     public class NewQuestApiModel
@@ -16,5 +17,6 @@ namespace LifeQuest.Api.Models.API
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required int Value { get; set; }
+        public required string GroupId { get; set; }
     }
 }
