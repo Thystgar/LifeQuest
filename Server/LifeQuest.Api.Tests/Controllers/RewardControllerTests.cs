@@ -47,8 +47,8 @@ namespace LifeQuest.Api.Tests.Controllers
         {
             var mockRewards = new List<RewardStorageModel>
             {
-                new RewardStorageModel { Id = "1", Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false },
-                new RewardStorageModel { Id = "2", Name = "Reward2", Description = "Description2", Value = 20, Redeemed = false }
+                new RewardStorageModel { Id = "1", Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false, GroupId = "group" },
+                new RewardStorageModel { Id = "2", Name = "Reward2", Description = "Description2", Value = 20, Redeemed = false, GroupId = "group" }
             };
 
             _rewardStorageMock.Setup(rs => rs.GetRewardsAsync()).ReturnsAsync(mockRewards);
@@ -71,8 +71,8 @@ namespace LifeQuest.Api.Tests.Controllers
         {
             var rewardId = "1";
             var accountId = "userIdTBD";
-            var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false };
-            var mockAccount = new AccountStorageModel { Id = accountId, Points = 50, Name = "Name" };
+            var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false, GroupId = "group" };
+            var mockAccount = new AccountStorageModel { Id = accountId, Points = 50, Name = "Name", GroupId = "group" };
 
             _accountStorageMock.Setup(s => s.GetAccountByIdAsync(accountId)).ReturnsAsync(mockAccount);
             _accountStorageMock.Setup(s => s.UpdateAccountAsync(It.IsAny<AccountStorageModel>())).Returns(Task.CompletedTask);
@@ -96,8 +96,8 @@ namespace LifeQuest.Api.Tests.Controllers
         {
             var rewardId = "1";
             var accountId = "userIdTBD";
-            var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false };
-            var mockAccount = new AccountStorageModel { Id = accountId, Points = 50, Name = "Name" };
+            var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false, GroupId = "group" };
+            var mockAccount = new AccountStorageModel { Id = accountId, Points = 50, Name = "Name", GroupId = "group" };
 
             _accountStorageMock.Setup(s => s.GetAccountByIdAsync(accountId)).ReturnsAsync(mockAccount);
             _rewardStorageMock.Setup(rs => rs.GetRewardByIdAsync(rewardId)).ReturnsAsync(mockReward);
@@ -114,8 +114,8 @@ namespace LifeQuest.Api.Tests.Controllers
         {
             var rewardId = "1";
             var accountId = "userIdTBD";
-            var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false };
-            var mockAccount = new AccountStorageModel { Id = accountId, Points = 50, Name="Name" };
+            var mockReward = new RewardStorageModel { Id = rewardId, Name = "Reward1", Description = "Description1", Value = 10, Redeemed = false, GroupId = "group" };
+            var mockAccount = new AccountStorageModel { Id = accountId, Points = 50, Name="Name", GroupId = "group" };
 
             _rewardStorageMock.Setup(rs => rs.GetRewardByIdAsync(rewardId)).ReturnsAsync(mockReward);
             _rewardStorageMock.Setup(rs => rs.UpdateRewardAsync(It.IsAny<RewardStorageModel>())).Returns(Task.CompletedTask);
@@ -133,8 +133,8 @@ namespace LifeQuest.Api.Tests.Controllers
         [Fact(Skip = "Not working atm")]
         public async Task AddRewardAsync_ReturnsOkWithAddedReward()
         {
-            var newReward = new RewardApiModel { Id = "3", Name = "Reward3", Description = "Description3", Value = 30, Redeemed = false };
-            var storageReward = new RewardStorageModel { Id = "3", Name = "Reward3", Description = "Description3", Value = 30, Redeemed = false };
+            var newReward = new RewardApiModel { Id = "3", Name = "Reward3", Description = "Description3", Value = 30, Redeemed = false, GroupId = "group" };
+            var storageReward = new RewardStorageModel { Id = "3", Name = "Reward3", Description = "Description3", Value = 30, Redeemed = false, GroupId = "group" };
 
             _rewardStorageMock.Setup(rs => rs.AddRewardAsync(It.IsAny<RewardStorageModel>())).Returns(Task.CompletedTask);
 

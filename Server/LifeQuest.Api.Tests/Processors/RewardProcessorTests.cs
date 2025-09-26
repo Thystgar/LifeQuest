@@ -23,7 +23,7 @@ namespace LifeQuest.Api.Tests.Processors
         [Fact]
         public async Task GetRewardsAsync_ReturnsRewards()
         {
-            var rewards = new List<RewardApiModel> { new RewardApiModel { Id = "1", Name = "Reward", Description="Description", Redeemed=false, Value=100 } };
+            var rewards = new List<RewardApiModel> { new RewardApiModel { Id = "1", Name = "Reward", Description="Description", Redeemed=false, Value=100, GroupId = "group" } };
             _mockStorage.Setup(s => s.GetRewardsAsync()).ReturnsAsync(rewards.Select(r => r.ToStorageModel()));
 
             var result = await _rewardProcessor.GetRewardsAsync();
@@ -36,7 +36,7 @@ namespace LifeQuest.Api.Tests.Processors
         [Fact]
         public async Task AddRewardAsync_CallsStorageAdd()
         {
-            var reward = new RewardApiModel { Id = "1", Name = "Reward", Description = "Description", Redeemed = false, Value = 100 };
+            var reward = new RewardApiModel { Id = "1", Name = "Reward", Description = "Description", Redeemed = false, Value = 100, GroupId = "group" };
 
             await _rewardProcessor.AddRewardAsync(reward);
 
@@ -46,7 +46,7 @@ namespace LifeQuest.Api.Tests.Processors
         [Fact]
         public async Task RedeemRewardAsync_UpdatesRewardAndSpendsPoints()
         {
-            var reward = new RewardStorageModel { Id = "1", Name = "Reward", Description = "Description", Redeemed = false, Value = 100 };
+            var reward = new RewardStorageModel { Id = "1", Name = "Reward", Description = "Description", Redeemed = false, Value = 100, GroupId = "group" };
             _mockStorage.Setup(s => s.GetRewardByIdAsync("1")).ReturnsAsync(reward);
 
             var result = await _rewardProcessor.RedeemRewardAsync("user", "1");
