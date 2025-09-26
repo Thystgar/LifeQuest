@@ -14,18 +14,14 @@ namespace LifeQuest.Api.Processors
         public async Task AddPointsAsync(string userId,int points) 
         {
             var user =await _storage.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-
             user.Points += points;
-
             await _storage.UpdateAccountAsync(user);
         }
 
         public async Task SpendPointsAsync(string userId, int points)
         {
             var user = await _storage.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-
             user.Points -= points;
-
             await _storage.UpdateAccountAsync(user);
         }
 

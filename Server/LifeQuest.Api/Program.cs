@@ -6,7 +6,6 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Azure.Identity;
 using OpenTelemetry.Trace;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 
@@ -58,6 +57,8 @@ namespace LifeQuest.Api
                     services.AddScoped<IRewardProcessor, RewardProcessor>();
                     services.AddScoped<IQuestProcessor, QuestProcessor>();
                     services.AddScoped<IUserContext, UserContext>();
+                    services.AddScoped<IGroupStorage, GroupDbStorage>();
+                    services.AddScoped<IGroupProcessor, GroupProcessor>();
                     services.AddLogging();
 
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
