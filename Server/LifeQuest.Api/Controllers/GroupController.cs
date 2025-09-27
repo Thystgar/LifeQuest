@@ -27,12 +27,12 @@ namespace LifeQuest.Api.Controllers
         {
             var userId = _userContext.GetUserId();
             _logger.LogInformation("Getting all groups for user {UserId}", userId);
-            var groups = await _groupProcessor.GetGroupsAsync();
+            var groups = await _groupProcessor.GetGroupAsync();
             return Ok(groups);
         }
 
         [HttpPost]
-        public async Task<ActionResult<GroupApiModel>> AddGroupAsync([FromBody] GroupApiModel group)
+        public async Task<ActionResult<GroupApiModel>> AddGroupAsync([FromBody] NewGroupApiModel group)
         {
             if (group == null)
             {

@@ -1,5 +1,6 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Models.Mappers;
+using LifeQuest.Api.Models.Storage;
 using LifeQuest.Api.Storage;
 
 namespace LifeQuest.Api.Processors
@@ -8,10 +9,12 @@ namespace LifeQuest.Api.Processors
     {
         private readonly IQuestStorage _storage;
         private readonly IAccountProcessor _account;
-        public QuestProcessor(IQuestStorage storage, IAccountProcessor account)
+        private readonly IGroupProcessor _group;
+        public QuestProcessor(IQuestStorage storage, IAccountProcessor account, IGroupProcessor groupProcessor)
         {
             _storage = storage;
             _account = account;
+            _group = groupProcessor;
         }
 
         public async Task<IEnumerable<QuestApiModel>> GetQuestsAsync() 
@@ -28,10 +31,19 @@ namespace LifeQuest.Api.Processors
             return quest.ToApiModel();
         }
 
-        public async Task AddQuestAsync(QuestApiModel quest)
+        public async Task AddQuestAsync(NewQuestApiModel quest)
         {
-            var storageQuest = quest.ToStorageModel();
-            storageQuest.Id = Guid.NewGuid().ToString();
+            var group = await _group.GetGroupAsync(); 
+            var storageQuest = new QuestStorageModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = quest.Name,
+                Description = quest.Description,
+                Value = quest.Value,
+                Status = QuestStatusStorageEnum.Active,
+                GroupId = group.First().Id
+            };
+
             await _storage.AddQuestAsync(storageQuest);
         }
     }

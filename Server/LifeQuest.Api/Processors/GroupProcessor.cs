@@ -1,5 +1,6 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Models.Mappers;
+using LifeQuest.Api.Models.Storage;
 using LifeQuest.Api.Storage;
 
 namespace LifeQuest.Api.Processors
@@ -13,7 +14,7 @@ namespace LifeQuest.Api.Processors
             _groupStorage = groupStorage;
         }
 
-        public async Task<IEnumerable<GroupApiModel>> GetGroupsAsync()
+        public async Task<IEnumerable<GroupApiModel>> GetGroupAsync()
         {
             var groups = await _groupStorage.GetGroupAsync();
             return groups.Select(g => g.ToApiModel());
@@ -25,10 +26,15 @@ namespace LifeQuest.Api.Processors
             return group.ToApiModel();
         }
 
-        public async Task AddGroupAsync(GroupApiModel group)
+        public async Task AddGroupAsync(NewGroupApiModel group)
         {
-            var storageGroup = group.ToStorageModel();
-            storageGroup.Id = Guid.NewGuid().ToString();
+            var storageGroup = new GroupStorageModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = group.Name, 
+                Description = group.Description,
+                InviteCode = Guid.NewGuid().ToString().Substring(0, 8)
+            };
             await _groupStorage.UpdateGroupAsync(storageGroup);
         }
 
