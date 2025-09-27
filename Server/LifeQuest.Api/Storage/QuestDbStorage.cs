@@ -41,7 +41,8 @@ namespace LifeQuest.Api.Storage
                     .SetProperty(q => q.Name, quest.Name)
                     .SetProperty(q => q.Description, quest.Description)
                     .SetProperty(q => q.Status, quest.Status)
-                    .SetProperty(q => q.Value, quest.Value));
+                    .SetProperty(q => q.Value, quest.Value)
+                    .SetProperty(q => q.GroupId, quest.GroupId));
         }
     }
 }

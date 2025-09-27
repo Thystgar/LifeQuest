@@ -6,34 +6,36 @@ namespace LifeQuest.Api.Processors
 {
     public class AccountProcessor : IAccountProcessor
     {
-        private readonly IAccountStorage _storage;
-        public AccountProcessor(IAccountStorage storage) 
+        private readonly IAccountStorage _account;
+        public AccountProcessor(IAccountStorage account) 
         {
-            _storage = storage;
+            _account = account;
         }
         public async Task AddPointsAsync(string userId,int points) 
         {
-            var user =await _storage.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-            user.Points += points;
-            await _storage.UpdateAccountAsync(user);
+            var account =await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            account.Points += points;
+            await _account.UpdateAccountAsync(account);
         }
 
         public async Task SpendPointsAsync(string userId, int points)
         {
-            var user = await _storage.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-            user.Points -= points;
-            await _storage.UpdateAccountAsync(user);
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            account.Points -= points;
+            await _account.UpdateAccountAsync(account);
         }
 
         public async Task<AccountApiModel?> GetAccountAsync(string userId)
         {
-            var user = await _storage.GetAccountByIdAsync(userId);
-            return user?.ToApiModel();
+            var account = await _account.GetAccountByIdAsync(userId);
+            return account?.ToApiModel();
         }
 
         public async Task JoinGroupAsync(string userId, string inviteCode)
         {
-
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            account.GroupId = inviteCode;
+            await _account.UpdateAccountAsync(account);
         }
     }
 }

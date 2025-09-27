@@ -23,7 +23,8 @@ namespace LifeQuest.Api.Storage
                 .Where(a => a.Id == account.Id)
                 .ExecuteUpdateAsync(a => a
                     .SetProperty(a => a.Name, account.Name)
-                    .SetProperty(a => a.Points, account.Points));
+                    .SetProperty(a => a.Points, account.Points)
+                    .SetProperty(a => a.GroupId, account.GroupId));
         }
     }
 }

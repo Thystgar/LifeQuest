@@ -41,7 +41,8 @@ namespace LifeQuest.Api.Storage
                     .SetProperty(r => r.Name, reward.Name)
                     .SetProperty(r => r.Description, reward.Description)
                     .SetProperty(r => r.Value, reward.Value)
-                    .SetProperty(r => r.Redeemed, reward.Redeemed));
+                    .SetProperty(r => r.Redeemed, reward.Redeemed)
+                    .SetProperty(r => r.GroupId, reward.GroupId));
         }
     }
 }
