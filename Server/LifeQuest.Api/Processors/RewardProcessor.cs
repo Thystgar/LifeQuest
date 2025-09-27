@@ -1,5 +1,6 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Models.Mappers;
+using LifeQuest.Api.Models.Storage;
 using LifeQuest.Api.Storage;
 
 namespace LifeQuest.Api.Processors
@@ -21,10 +22,19 @@ namespace LifeQuest.Api.Processors
             return rewards.Select(r => r.ToApiModel());
         }
 
-        public async Task AddRewardAsync(RewardApiModel reward)
+        public async Task AddRewardAsync(NewRewardApiModel reward)
         {
-            var storageReward = reward.ToStorageModel();
-            storageReward.Id = Guid.NewGuid().ToString();
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("User not returned");
+            var storageReward = new RewardStorageModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = reward.Name,
+                Description = reward.Description,
+                Value = reward.Value,
+                Redeemed = false,
+                GroupId = account.GroupId
+            };
+
             await _storage.AddRewardAsync(storageReward);
         }
 

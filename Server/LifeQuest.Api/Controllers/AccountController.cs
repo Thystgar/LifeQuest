@@ -1,5 +1,6 @@
 ﻿using LifeQuest.Api.Models.API;
 using LifeQuest.Api.Processors;
+using LifeQuest.Api.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
@@ -11,7 +12,9 @@ namespace LifeQuest.Api.Controllers
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountProcessor _accountProcessor; 
+        private readonly IAccountProcessor _accountProcessor;
+        private readonly IUserContext _userContext;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(IAccountProcessor accountProcessor) 
         {
@@ -34,6 +37,19 @@ namespace LifeQuest.Api.Controllers
 
             var account = await _accountProcessor.GetAccountAsync(userId);
             return Ok(account);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> JoinGroupAsync([FromBody] string inviteCode)
+        {
+            if (string.IsNullOrWhiteSpace(inviteCode))
+            {
+                return BadRequest("Group ID cannot be empty.");
+            }
+            var userId = _userContext.GetUserId();
+            _logger.LogInformation("User {UserId} joining group {GroupId}", userId, inviteCode);
+            await _accountProcessor.JoinGroupAsync(userId, inviteCode);
+            return NoContent();
         }
     }
 }

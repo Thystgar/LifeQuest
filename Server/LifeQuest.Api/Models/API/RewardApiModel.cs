@@ -9,4 +9,11 @@ namespace LifeQuest.Api.Models.API
         public required bool Redeemed { get; set; }
         public required string GroupId { get; set; }
     }
+
+    public class NewRewardApiModel
+    {
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required int Value { get; set; }
+    }
 }

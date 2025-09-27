@@ -38,16 +38,11 @@ namespace LifeQuest.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<RewardApiModel>> AddRewardAsync([FromBody] RewardApiModel reward)
+        public async Task<ActionResult<RewardApiModel>> AddRewardAsync([FromBody] NewRewardApiModel reward)
         {
             if (reward == null)
             {
                 return BadRequest("Reward cannot be null.");
-            }
-
-            if (reward.Redeemed)
-            {
-                return BadRequest("Reward cannot be redeemed when added.");
             }
 
             if (reward.Value <= 0)

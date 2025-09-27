@@ -4,7 +4,7 @@ namespace LifeQuest.Api.Storage
 {
     public interface IGroupStorage
     {
-        Task<IEnumerable<GroupStorageModel>> GetGroupAsync();
+        Task<IEnumerable<GroupStorageModel>> GetGroupsAsync();
         Task<GroupStorageModel?> GetGroupByIdAsync(string id);
         Task UpdateGroupAsync(GroupStorageModel group);
     }

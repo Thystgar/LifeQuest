@@ -23,30 +23,16 @@ namespace LifeQuest.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroupApiModel>>> GetGroupsAsync()
+        public async Task<ActionResult<IEnumerable<GroupApiModel>>> GetGroupAsync()
         {
             var userId = _userContext.GetUserId();
             _logger.LogInformation("Getting all groups for user {UserId}", userId);
-            var groups = await _groupProcessor.GetGroupsAsync();
-            return Ok(groups);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<GroupApiModel>> CreateGroupAsync()
-        {
-            var group = new GroupApiModel
-            {
-                Id = "Group Id",
-                Name = "New Group",
-                Description = "Group Description"
-            };
-
-            await _groupProcessor.AddGroupAsync(group);
+            var group = await _groupProcessor.GetGroupByIdAsync(userId);
             return Ok(group);
         }
 
         [HttpPost]
-        public async Task<ActionResult<GroupApiModel>> AddGroupAsync([FromBody] GroupApiModel group)
+        public async Task<ActionResult<GroupApiModel>> AddGroupAsync([FromBody] NewGroupApiModel group)
         {
             if (group == null)
             {
@@ -66,6 +52,27 @@ namespace LifeQuest.Api.Controllers
             return Ok(group);
         }
 
-
+        [HttpPut]
+        public async Task<ActionResult> UpdateGroupAsync([FromBody] GroupApiModel group)
+        {
+            if (group == null)
+            {
+                return BadRequest("Group cannot be null.");
+            }
+            if (string.IsNullOrWhiteSpace(group.Id))
+            {
+                return BadRequest("Group ID cannot be empty.");
+            }
+            if (string.IsNullOrWhiteSpace(group.Name))
+            {
+                return BadRequest("Group name cannot be empty.");
+            }
+            if (string.IsNullOrWhiteSpace(group.Description))
+            {
+                return BadRequest("Group description cannot be empty.");
+            }
+            await _groupProcessor.UpdateGroupAsync(group);
+            return NoContent();
+        }
     }
 }

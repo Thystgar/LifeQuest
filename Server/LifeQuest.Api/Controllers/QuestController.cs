@@ -40,7 +40,7 @@ namespace LifeQuest.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<QuestApiModel>> AddQuestAsync([FromBody] QuestApiModel quest)
+        public async Task<ActionResult<QuestApiModel>> AddQuestAsync([FromBody] NewQuestApiModel quest)
         {
             if (quest == null)
             {

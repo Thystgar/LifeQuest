@@ -6,29 +6,47 @@ namespace LifeQuest.Api.Processors
 {
     public class AccountProcessor : IAccountProcessor
     {
-        private readonly IAccountStorage _storage;
-        public AccountProcessor(IAccountStorage storage) 
-        {
-            _storage = storage;
-        }
-        public async Task AddPointsAsync(string userId,int points) 
-        {
-            var user =await _storage.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-            user.Points += points;
-            await _storage.UpdateAccountAsync(user);
-        }
+        private readonly IAccountStorage _account;
+        private readonly IUserContext _userContext;
 
-        public async Task SpendPointsAsync(string userId, int points)
+        public AccountProcessor(IAccountStorage account, IUserContext userContext) 
         {
-            var user = await _storage.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-            user.Points -= points;
-            await _storage.UpdateAccountAsync(user);
+            _account = account;
+            _userContext = userContext;
         }
 
         public async Task<AccountApiModel?> GetAccountAsync(string userId)
         {
-            var user = await _storage.GetAccountByIdAsync(userId);
-            return user?.ToApiModel();
+            var account = await _account.GetAccountByIdAsync(userId);
+            return account?.ToApiModel();
+        }
+
+        public async Task<AccountApiModel?> GetMyAccountAsync()
+        {
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
+            var account = await _account.GetAccountByIdAsync(userId);
+            return account?.ToApiModel();
+        }
+
+        public async Task AddPointsAsync(string userId,int points) 
+        {
+            var account =await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            account.Points += points;
+            await _account.UpdateAccountAsync(account);
+        }
+
+        public async Task SpendPointsAsync(string userId, int points)
+        {
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            account.Points -= points;
+            await _account.UpdateAccountAsync(account);
+        }
+
+        public async Task JoinGroupAsync(string userId, string inviteCode)
+        {
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            account.GroupId = inviteCode;
+            await _account.UpdateAccountAsync(account);
         }
     }
 }

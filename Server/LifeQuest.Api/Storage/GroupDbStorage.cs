@@ -11,7 +11,7 @@ namespace LifeQuest.Api.Storage
             _context = context;
         }
 
-        public async Task<IEnumerable<GroupStorageModel>> GetGroupAsync()
+        public async Task<IEnumerable<GroupStorageModel>> GetGroupsAsync()
         {
             return await _context.Groups.ToListAsync();
         }
@@ -27,7 +27,8 @@ namespace LifeQuest.Api.Storage
                 .Where(g => g.Id == group.Id)
                 .ExecuteUpdateAsync(g => g
                     .SetProperty(g => g.Name, group.Name)
-                    .SetProperty(g => g.Description, group.Description));
+                    .SetProperty(g => g.Description, group.Description)
+                    .SetProperty(g => g.InviteCode, group.InviteCode));
         }
     }
 }
