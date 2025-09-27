@@ -11,7 +11,8 @@ namespace LifeQuest.Api.Models.Mappers
             {
                 Id = storageModel.Id,
                 Name = storageModel.Name,
-                Description = storageModel.Description
+                Description = storageModel.Description,
+                InviteCode = storageModel.InviteCode
             };
         }
 
@@ -21,7 +22,8 @@ namespace LifeQuest.Api.Models.Mappers
             {
                 Id = apiModel.Id,
                 Name = apiModel.Name,
-                Description = apiModel.Description
+                Description = apiModel.Description,
+                InviteCode = apiModel.InviteCode
             };
         }
     }

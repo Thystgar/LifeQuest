@@ -30,5 +30,10 @@ namespace LifeQuest.Api.Processors
             var user = await _storage.GetAccountByIdAsync(userId);
             return user?.ToApiModel();
         }
+
+        public async Task JoinGroupAsync(string userId, string inviteCode)
+        {
+
+        }
     }
 }

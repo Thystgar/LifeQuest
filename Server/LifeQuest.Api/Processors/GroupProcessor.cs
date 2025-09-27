@@ -34,12 +34,7 @@ namespace LifeQuest.Api.Processors
 
         public async Task UpdateGroupAsync(GroupApiModel group)
         {
-            var groupStorage = new Models.Storage.GroupStorageModel
-            {
-                Id = group.Id,
-                Name = group.Name,
-                Description = group.Description
-            };
+            var groupStorage = group.ToStorageModel();
             await _groupStorage.UpdateGroupAsync(groupStorage);
         }
     }

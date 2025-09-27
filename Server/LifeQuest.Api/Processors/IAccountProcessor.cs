@@ -7,5 +7,6 @@ namespace LifeQuest.Api.Processors
         Task AddPointsAsync(string userId, int points);
         Task SpendPointsAsync(string userId, int points);
         Task<AccountApiModel?> GetAccountAsync(string userId);
+        Task JoinGroupAsync(string userId, string inviteCode);
     }
 }
