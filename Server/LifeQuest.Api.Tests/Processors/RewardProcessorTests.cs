@@ -54,7 +54,7 @@ namespace LifeQuest.Api.Tests.Processors
             Assert.NotNull(result);
             Assert.True(result.Redeemed);
             _mockStorage.Verify(s => s.UpdateRewardAsync(It.IsAny<RewardStorageModel>()), Times.Once);
-            _mockAccountProcessor.Verify(a => a.SpendPointsAsync("user", 100), Times.Once);
+            _mockAccountProcessor.Verify(a => a.SpendPointsAsync(100), Times.Once);
         }
 
         [Fact]
