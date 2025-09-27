@@ -9,13 +9,11 @@ namespace LifeQuest.Api.Processors
     {
         private readonly IRewardStorage _storage;
         private readonly IAccountProcessor _account;
-        private readonly IGroupProcessor _group;
 
-        public RewardProcessor(IRewardStorage storage, IAccountProcessor account, IGroupProcessor group)
+        public RewardProcessor(IRewardStorage storage, IAccountProcessor account)
         {
             _storage = storage;
             _account = account;
-            _group = group;
         }
 
         public async Task<IEnumerable<RewardApiModel>> GetRewardsAsync()
@@ -26,7 +24,7 @@ namespace LifeQuest.Api.Processors
 
         public async Task AddRewardAsync(NewRewardApiModel reward)
         {
-            var group = await _group.GetGroupAsync();
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("User not returned");
             var storageReward = new RewardStorageModel
             {
                 Id = Guid.NewGuid().ToString(),
@@ -34,7 +32,7 @@ namespace LifeQuest.Api.Processors
                 Description = reward.Description,
                 Value = reward.Value,
                 Redeemed = false,
-                GroupId = group.First().Id
+                GroupId = account.GroupId
             };
 
             await _storage.AddRewardAsync(storageReward);

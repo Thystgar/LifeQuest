@@ -9,12 +9,11 @@ namespace LifeQuest.Api.Processors
     {
         private readonly IQuestStorage _storage;
         private readonly IAccountProcessor _account;
-        private readonly IGroupProcessor _group;
-        public QuestProcessor(IQuestStorage storage, IAccountProcessor account, IGroupProcessor groupProcessor)
+
+        public QuestProcessor(IQuestStorage storage, IAccountProcessor account)
         {
             _storage = storage;
             _account = account;
-            _group = groupProcessor;
         }
 
         public async Task<IEnumerable<QuestApiModel>> GetQuestsAsync() 
@@ -33,7 +32,7 @@ namespace LifeQuest.Api.Processors
 
         public async Task AddQuestAsync(NewQuestApiModel quest)
         {
-            var group = await _group.GetGroupAsync(); 
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("User not returned");
             var storageQuest = new QuestStorageModel
             {
                 Id = Guid.NewGuid().ToString(),
@@ -41,7 +40,7 @@ namespace LifeQuest.Api.Processors
                 Description = quest.Description,
                 Value = quest.Value,
                 Status = QuestStatusStorageEnum.Active,
-                GroupId = group.First().Id
+                GroupId = account.GroupId
             };
 
             await _storage.AddQuestAsync(storageQuest);

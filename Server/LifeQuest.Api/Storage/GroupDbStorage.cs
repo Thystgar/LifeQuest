@@ -11,7 +11,7 @@ namespace LifeQuest.Api.Storage
             _context = context;
         }
 
-        public async Task<IEnumerable<GroupStorageModel>> GetGroupAsync()
+        public async Task<IEnumerable<GroupStorageModel>> GetGroupsAsync()
         {
             return await _context.Groups.ToListAsync();
         }

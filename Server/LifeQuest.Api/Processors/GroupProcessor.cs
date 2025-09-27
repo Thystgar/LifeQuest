@@ -14,12 +14,6 @@ namespace LifeQuest.Api.Processors
             _groupStorage = groupStorage;
         }
 
-        public async Task<IEnumerable<GroupApiModel>> GetGroupAsync()
-        {
-            var groups = await _groupStorage.GetGroupAsync();
-            return groups.Select(g => g.ToApiModel());
-        }
-
         public async Task<GroupApiModel> GetGroupByIdAsync(string id)
         {
             var group = await _groupStorage.GetGroupByIdAsync(id) ?? throw new NullReferenceException("Group not returned");

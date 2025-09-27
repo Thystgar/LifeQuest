@@ -7,10 +7,27 @@ namespace LifeQuest.Api.Processors
     public class AccountProcessor : IAccountProcessor
     {
         private readonly IAccountStorage _account;
-        public AccountProcessor(IAccountStorage account) 
+        private readonly IUserContext _userContext;
+
+        public AccountProcessor(IAccountStorage account, IUserContext userContext) 
         {
             _account = account;
+            _userContext = userContext;
         }
+
+        public async Task<AccountApiModel?> GetAccountAsync(string userId)
+        {
+            var account = await _account.GetAccountByIdAsync(userId);
+            return account?.ToApiModel();
+        }
+
+        public async Task<AccountApiModel?> GetMyAccountAsync()
+        {
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
+            var account = await _account.GetAccountByIdAsync(userId);
+            return account?.ToApiModel();
+        }
+
         public async Task AddPointsAsync(string userId,int points) 
         {
             var account =await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
@@ -23,12 +40,6 @@ namespace LifeQuest.Api.Processors
             var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
             account.Points -= points;
             await _account.UpdateAccountAsync(account);
-        }
-
-        public async Task<AccountApiModel?> GetAccountAsync(string userId)
-        {
-            var account = await _account.GetAccountByIdAsync(userId);
-            return account?.ToApiModel();
         }
 
         public async Task JoinGroupAsync(string userId, string inviteCode)
