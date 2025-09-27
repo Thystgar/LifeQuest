@@ -3,5 +3,7 @@
     public interface IUserContext
     {
         string GetUserId();
+        string GetUserName();
+        string GetUserEmail();
     }
 }

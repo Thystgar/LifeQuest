@@ -26,5 +26,18 @@ namespace LifeQuest.Api.Storage
                     .SetProperty(a => a.Points, account.Points)
                     .SetProperty(a => a.GroupId, account.GroupId));
         }
+
+        public async Task CreateNewAccount(string userId, string userName)
+        {
+            var newAccount = new AccountStorageModel
+            {
+                Id = userId,
+                Name = userName,
+                Points = 0,
+                GroupId = ""
+            };
+            _context.Accounts.Add(newAccount);
+            await _context.SaveChangesAsync();
+        }
     }
 }

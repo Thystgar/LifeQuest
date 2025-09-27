@@ -18,7 +18,9 @@ namespace LifeQuest.Api.Processors
 
         public async Task<IEnumerable<RewardApiModel>> GetRewardsAsync()
         {
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
             var rewards = await _storage.GetRewardsAsync();
+            rewards = rewards.Where(r => r.GroupId == account.GroupId);
             return rewards.Select(r => r.ToApiModel());
         }
 
