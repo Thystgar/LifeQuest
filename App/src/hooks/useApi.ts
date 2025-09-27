@@ -1,6 +1,12 @@
-import React, { useEffect } from 'react';
 import { useAuth } from '@/hooks//useAuth';
 import { Account, Quest, Reward } from '@/api';
+import { NewGroup } from '@/api/models/Group';
+  // ...existing code...
+  // ...existing code...
+  // ...existing code...
+  // ...existing code...
+  // ...existing API methods...
+
 
 export function useApi() {
   const BASE_URI = 'http://10.0.2.2:8080';
@@ -19,7 +25,7 @@ export function useApi() {
     };
     const url = getUrl(path);
 
-    console.log(`Sending ${method} request to ${url} with headers ${JSON.stringify(headers)} and body:`, body);
+    console.log(`Sending ${method} request to ${url} with body:`, body);
 
     try {
       const response = await fetch(url, {
@@ -71,6 +77,14 @@ export function useApi() {
     return await sendRequestAsync('/account', 'GET');
   };
 
+  const createGroup = async (newGroup: NewGroup): Promise<void> => {
+    await sendRequestAsync('/group', 'POST', newGroup);
+  };
+
+  const joinGroup = async (inviteCode: string): Promise<void> => {
+    await sendRequestAsync(`/account?inviteCode=${inviteCode}`, 'POST');
+  };
+
   return {
     fetchQuests,
     completeQuest,
@@ -80,6 +94,8 @@ export function useApi() {
     addReward,
     deleteReward,
     fetchAccount,
+    createGroup,
+    joinGroup,
   };
 }
 

@@ -4,19 +4,22 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { Quest, QuestStatus } from '@/api';
 import { useApi } from '@/hooks/useApi';
 import { useAccount } from '@/hooks/useAccount';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function QuestsTab() {
   
   const { fetchQuests, completeQuest, addQuest } = useApi();
-  const { account } = useAccount();
+  const { account, onPointChange } = useAccount();
 
+  const { isUserAuthenticated } = useAuth();
+  
   const [quests, setQuests] = useState<Quest[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [quest, setQuest] = useState<Quest | null>(new Quest());
 
   useEffect(() => {
     fetchData();
-  }, [account]);
+  }, [isUserAuthenticated]);
 
   const fetchData = async () => {
     try {
@@ -31,11 +34,7 @@ export default function QuestsTab() {
   const handleQuestSwipe = async (id: string) => {
     try {
       await completeQuest(id);
-      setQuests((prevQuests) =>
-        prevQuests.map((quest) =>
-          quest.id === id ? { ...quest, status: QuestStatus.Completed } : quest
-        )
-      );
+      onPointChange();
     } catch (error) {
       console.error(error);
     }
@@ -57,19 +56,20 @@ export default function QuestsTab() {
   return (
     <View style={styles.container}>
       <SwipeListView
-        data={quests.sort((a, b) => a.status === QuestStatus.Completed ? 1 : -1)}
+        data={quests.sort((a, b) => a.name.localeCompare(b.name))}
         keyExtractor={(quest) => quest.id}
         renderItem={({ item }) => (
           <View style={styles.rowFront}>
-            <Text style={[styles.quest, item.status == QuestStatus.Completed && styles.completedQuest]}>
-              {item.name} - {item.value} points
-            </Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.quest, item.status == QuestStatus.Completed && styles.completedQuest]}>{item.name}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+            <Text style={styles.value}>{item.value} points</Text>
           </View>
         )}
         renderHiddenItem={({ item }) => (
           <View style={styles.rowBack}>
             <Text style={styles.backText}>Complete</Text>
-            <Text style={styles.backText}>Reactivate</Text>
           </View>
         )}
         leftOpenValue={75}
@@ -155,6 +155,18 @@ const styles = StyleSheet.create({
   completedQuest: {
     textDecorationLine: 'line-through',
     color: 'green',
+  },
+  description: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 2,
+  },
+  value: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginLeft: 10,
+    alignSelf: 'center',
   },
   rowBack: {
     alignItems: 'center',

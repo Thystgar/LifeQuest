@@ -26,18 +26,7 @@ namespace LifeQuest.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<AccountApiModel>> GetAccountAsync() 
         {
-            // http://schemas.microsoft.com/identity/claims/objectidentifier - id
-            // preferred_username - email
-            // name - display name
-            // http://schemas.microsoft.com/identity/claims/scope - api scope (we only have user now)
-            var userId = User.FindFirst(ClaimConstants.ObjectId)?.Value;
-
-            if (userId == null)
-            {
-                return BadRequest("Username null");
-            }
-
-            var account = await _accountProcessor.GetAccountOrCreateAsync(userId);
+            var account = await _accountProcessor.GetAccountOrCreateAsync();
             return Ok(account);
         }
 

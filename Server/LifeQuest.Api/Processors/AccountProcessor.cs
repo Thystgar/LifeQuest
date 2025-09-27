@@ -15,8 +15,9 @@ namespace LifeQuest.Api.Processors
             _userContext = userContext;
         }
 
-        public async Task<AccountApiModel?> GetAccountOrCreateAsync(string userId)
+        public async Task<AccountApiModel?> GetAccountOrCreateAsync()
         {
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
             var account = await _account.GetAccountByIdAsync(userId);
             if (account == null)
             {

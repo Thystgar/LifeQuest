@@ -1,5 +1,5 @@
 
-import { Account, Quest, Reward } from '.';
+import { Account, Quest, Reward, NewGroup } from '.';
 
 const BASE_URI = 'http://10.0.2.2:8080';
 
@@ -141,6 +141,45 @@ export const fetchAccount = async (accessToken?: string): Promise<Account> => {
         return await response.json();
     } catch (error) {
         console.error('Error fetching account information:', error);
+        throw error;
+    }
+};
+
+export const createGroup = async (newGroup: NewGroup, accessToken?: string): Promise<void> => {
+    try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(getAuthHeader(accessToken) || {}),
+        };
+        const response = await fetch(`${BASE_URI}/group`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(newGroup),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error creating group:', error);
+        throw error;
+    }
+};
+
+export const joinGroup = async (inviteCode: string, accessToken?: string): Promise<void> => {
+    try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(getAuthHeader(accessToken) || {}),
+        };
+        const response = await fetch(`${BASE_URI}/group?inviteCode=${inviteCode}`, {
+            method: 'POST',
+            headers,
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error joining group:', error);
         throw error;
     }
 };

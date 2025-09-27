@@ -6,7 +6,7 @@ import { useApi } from '@/hooks/useApi';
 import { useAccount } from '@/hooks/useAccount';
 
 export default function RewardsTab() {
-  const { account } = useAccount();
+  const { account, onPointChange } = useAccount();
   const { redeemReward, addReward, fetchRewards } = useApi();
 
   // local data
@@ -31,11 +31,7 @@ export default function RewardsTab() {
   const handleRewardRightSwipe = async (id: string) => {
     try {
       await redeemReward(id);
-      setRewardItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === id ? { ...item, redeemed: true } : item
-        )
-      );
+      onPointChange();
     } catch (error) {
       console.error(error);
     }
@@ -80,7 +76,6 @@ export default function RewardsTab() {
         renderHiddenItem={({ item }) => (
           <View style={styles.rowBack}>
             <Text style={styles.backText}>Redeem</Text>
-            <Text style={styles.backText}>Reactivate</Text>
           </View>
         )}
         leftOpenValue={75}
