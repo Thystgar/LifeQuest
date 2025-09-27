@@ -18,21 +18,23 @@ namespace LifeQuest.Api.Processors
 
         public async Task<IEnumerable<QuestApiModel>> GetQuestsAsync() 
         {
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
             var quests = await _storage.GetQuestsAsync();
+            quests = quests.Where(q => q.GroupId == account.GroupId);
             return quests.Select(q => q.ToApiModel());
         }
 
         public async Task<QuestApiModel> CompleteQuestAsync(string userId, string questId) 
         {
             //TODO: complete quest, at this moment all quests are repeatable
-            var quest = await _storage.GetQuestByIdAsync(questId);
+            var quest = await _storage.GetQuestByIdAsync(questId) ?? throw new NullReferenceException("Quest not returned");
             await _account.AddPointsAsync(userId, quest.Value);
             return quest.ToApiModel();
         }
 
         public async Task AddQuestAsync(NewQuestApiModel quest)
         {
-            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("User not returned");
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
             var storageQuest = new QuestStorageModel
             {
                 Id = Guid.NewGuid().ToString(),

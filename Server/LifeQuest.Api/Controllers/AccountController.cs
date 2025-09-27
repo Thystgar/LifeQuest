@@ -16,9 +16,11 @@ namespace LifeQuest.Api.Controllers
         private readonly IUserContext _userContext;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountProcessor accountProcessor) 
+        public AccountController(IAccountProcessor accountProcessor, IUserContext userContext, ILogger<AccountController> logger) 
         {
             _accountProcessor = accountProcessor;
+            _userContext = userContext;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -35,7 +37,7 @@ namespace LifeQuest.Api.Controllers
                 return BadRequest("Username null");
             }
 
-            var account = await _accountProcessor.GetAccountAsync(userId);
+            var account = await _accountProcessor.GetAccountOrCreateAsync(userId);
             return Ok(account);
         }
 
