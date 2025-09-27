@@ -23,12 +23,12 @@ namespace LifeQuest.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroupApiModel>>> GetGroupsAsync()
+        public async Task<ActionResult<IEnumerable<GroupApiModel>>> GetGroupAsync()
         {
             var userId = _userContext.GetUserId();
             _logger.LogInformation("Getting all groups for user {UserId}", userId);
-            var groups = await _groupProcessor.GetGroupAsync();
-            return Ok(groups);
+            var group = await _groupProcessor.GetGroupByIdAsync(userId);
+            return Ok(group);
         }
 
         [HttpPost]
