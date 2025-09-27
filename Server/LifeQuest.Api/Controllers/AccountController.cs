@@ -51,7 +51,8 @@ namespace LifeQuest.Api.Controllers
             var userId = _userContext.GetUserId();
             _logger.LogInformation("User {UserId} joining group {GroupId}", userId, inviteCode);
             await _accountProcessor.JoinGroupAsync(userId, inviteCode);
-            return NoContent();
+            var account = await _accountProcessor.GetMyAccountAsync();
+            return Ok(account);
         }
     }
 }

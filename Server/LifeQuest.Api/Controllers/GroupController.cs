@@ -14,12 +14,14 @@ namespace LifeQuest.Api.Controllers
         private readonly IGroupProcessor _groupProcessor;
         private readonly ILogger<GroupController> _logger;
         private readonly IUserContext _userContext;
+        private readonly IAccountProcessor _accountProcessor;
 
-        public GroupController(IGroupProcessor groupProcessor, ILogger<GroupController> logger, IUserContext userContext)
+        public GroupController(IGroupProcessor groupProcessor, ILogger<GroupController> logger, IUserContext userContext, IAccountProcessor accountProcessor)
         {
             _groupProcessor = groupProcessor;
             _logger = logger;
             _userContext = userContext;
+            _accountProcessor = accountProcessor;
         }
 
         [HttpGet]
@@ -49,6 +51,12 @@ namespace LifeQuest.Api.Controllers
             }
             
             await _groupProcessor.AddGroupAsync(group);
+
+            var createdGroup = await _groupProcessor.GetGroupByIdAsync(group.Name);
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
+            var inviteCode = createdGroup.InviteCode ?? throw new NullReferenceException("Invite code not found");
+            await _accountProcessor.JoinGroupAsync(userId, inviteCode);
+
             return Ok(group);
         }
 
@@ -72,7 +80,8 @@ namespace LifeQuest.Api.Controllers
                 return BadRequest("Group description cannot be empty.");
             }
             await _groupProcessor.UpdateGroupAsync(group);
-            return NoContent();
+            var newGroup = await _groupProcessor.GetGroupByIdAsync(group.Id);
+            return Ok(newGroup);
         }
     }
 }
