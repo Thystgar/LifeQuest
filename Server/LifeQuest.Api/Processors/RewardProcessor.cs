@@ -43,8 +43,10 @@ namespace LifeQuest.Api.Processors
         public async Task<RewardApiModel> RedeemRewardAsync(string userId, string rewardId)
         {
             var reward = await _storage.GetRewardByIdAsync(rewardId) ?? throw new NullReferenceException("Reward not found.");
+            var account = await _account.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
 
-            // TODO ensure consistency of reward value and user points
+            if (account.Points < reward.Value) throw new InvalidOperationException("Not enough points to redeem reward.");
+
             reward.Redeemed = true;
             await _storage.UpdateRewardAsync(reward);
             await _account.SpendPointsAsync(reward.Value);
