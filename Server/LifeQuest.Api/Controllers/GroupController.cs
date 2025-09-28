@@ -50,9 +50,9 @@ namespace LifeQuest.Api.Controllers
                 return BadRequest("Group description cannot be empty.");
             }
             
-            await _groupProcessor.AddGroupAsync(group);
+            var createdGroupId = await _groupProcessor.AddGroupAsync(group);
 
-            var createdGroup = await _groupProcessor.GetGroupByIdAsync(group.Name);
+            var createdGroup = await _groupProcessor.GetGroupByIdAsync(createdGroupId);
             var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
             var inviteCode = createdGroup.InviteCode ?? throw new NullReferenceException("Invite code not found");
             await _accountProcessor.JoinGroupAsync(inviteCode);

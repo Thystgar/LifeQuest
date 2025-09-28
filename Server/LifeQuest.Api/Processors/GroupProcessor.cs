@@ -20,16 +20,17 @@ namespace LifeQuest.Api.Processors
             return group.ToApiModel();
         }
 
-        public async Task AddGroupAsync(NewGroupApiModel group)
+        public async Task<string> AddGroupAsync(NewGroupApiModel group)
         {
             var storageGroup = new GroupStorageModel
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = group.Name, 
                 Description = group.Description,
-                InviteCode = Guid.NewGuid().ToString().Substring(0, 8)
+                InviteCode = Guid.NewGuid().ToString().Substring(0, 16)
             };
             await _groupStorage.UpdateGroupAsync(storageGroup);
+            return storageGroup.Id;
         }
 
         public async Task UpdateGroupAsync(GroupApiModel group)
