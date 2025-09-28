@@ -47,7 +47,7 @@ namespace LifeQuest.Api.Processors
             // TODO ensure consistency of reward value and user points
             reward.Redeemed = true;
             await _storage.UpdateRewardAsync(reward);
-            await _account.SpendPointsAsync(userId, reward.Value);
+            await _account.SpendPointsAsync(reward.Value);
 
             return reward.ToApiModel();
         }

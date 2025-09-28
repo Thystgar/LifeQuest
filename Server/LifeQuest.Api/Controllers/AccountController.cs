@@ -35,11 +35,11 @@ namespace LifeQuest.Api.Controllers
         {
             if (string.IsNullOrWhiteSpace(inviteCode))
             {
-                return BadRequest("Group ID cannot be empty.");
+                return BadRequest("Invite code cannot be empty.");
             }
             var userId = _userContext.GetUserId();
             _logger.LogInformation("User {UserId} joining group {GroupId}", userId, inviteCode);
-            await _accountProcessor.JoinGroupAsync(userId, inviteCode);
+            await _accountProcessor.JoinGroupAsync(inviteCode);
             var account = await _accountProcessor.GetMyAccountAsync();
             return Ok(account);
         }

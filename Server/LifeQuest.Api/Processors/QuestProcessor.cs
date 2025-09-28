@@ -28,7 +28,7 @@ namespace LifeQuest.Api.Processors
         {
             //TODO: complete quest, at this moment all quests are repeatable
             var quest = await _storage.GetQuestByIdAsync(questId) ?? throw new NullReferenceException("Quest not returned");
-            await _account.AddPointsAsync(userId, quest.Value);
+            await _account.AddPointsAsync(quest.Value);
             return quest.ToApiModel();
         }
 

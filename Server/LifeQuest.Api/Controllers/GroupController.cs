@@ -55,7 +55,7 @@ namespace LifeQuest.Api.Controllers
             var createdGroup = await _groupProcessor.GetGroupByIdAsync(group.Name);
             var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
             var inviteCode = createdGroup.InviteCode ?? throw new NullReferenceException("Invite code not found");
-            await _accountProcessor.JoinGroupAsync(userId, inviteCode);
+            await _accountProcessor.JoinGroupAsync(inviteCode);
 
             return Ok(group);
         }
