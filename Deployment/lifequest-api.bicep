@@ -2,7 +2,7 @@ param environment string
 
 targetScope = 'resourceGroup'
 
-resource containerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing =  {
+resource containerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = {
   name: 'lifequest-${environment}-api'
 }
 
@@ -29,7 +29,10 @@ resource container_identity_access 'Microsoft.Authorization/roleAssignments@2020
   scope: keyVault
   properties: {
     principalId: containerIdentity.properties.principalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'db79e9a7-68ee-4b58-9aeb-b90e7c24fcba')
+    roleDefinitionId: subscriptionResourceId(
+      'Microsoft.Authorization/roleDefinitions',
+      'db79e9a7-68ee-4b58-9aeb-b90e7c24fcba'
+    )
     principalType: 'ServicePrincipal'
   }
 }
@@ -54,6 +57,10 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-previ
             {
               protocol: 'TCP'
               port: 8080
+            }
+            {
+              protocol: 'TCP'
+              port: 8443
             }
           ]
           resources: {
@@ -82,6 +89,10 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-previ
         {
           protocol: 'TCP'
           port: 8080
+        }
+        {
+          protocol: 'TCP'
+          port: 8443
         }
       ]
       type: 'Public'

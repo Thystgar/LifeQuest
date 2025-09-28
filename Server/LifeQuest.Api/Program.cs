@@ -8,6 +8,8 @@ using OpenTelemetry.Trace;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Azure.Security.KeyVault.Secrets;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LifeQuest.Api
 {
@@ -106,7 +108,24 @@ namespace LifeQuest.Api
                         endpoints.MapControllers();
                     });
                 })
-                .UseKestrel();
+                .UseKestrel((context, options) =>
+                {
+                    var kvUri = context.Configuration.GetValue<string>("KeyVault:Url");
+                    if (!string.IsNullOrEmpty(kvUri))
+                    {
+                        var secretClient = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
+                        var certSecret = secretClient.GetSecret("lifequestwebsite-tls");
+                        if (certSecret?.Value?.Value != null)
+                        {
+                            var certBytes = Convert.FromBase64String(certSecret?.Value?.Value.ToString());
+                            var certificate = X509CertificateLoader.LoadPkcs12(certBytes, null);
+                            options.ListenAnyIP(443, listenOptions =>
+                            {
+                                listenOptions.UseHttps(certificate);
+                            });
+                        }
+                    }
+                });
             return builder;
         }
     }
