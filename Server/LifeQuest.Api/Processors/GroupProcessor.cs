@@ -29,7 +29,7 @@ namespace LifeQuest.Api.Processors
                 Description = group.Description,
                 InviteCode = Guid.NewGuid().ToString().Substring(0, 16)
             };
-            await _groupStorage.UpdateGroupAsync(storageGroup);
+            await _groupStorage.AddGroupAsync(storageGroup);
             return storageGroup.Id;
         }
 

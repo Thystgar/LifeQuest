@@ -35,5 +35,11 @@ namespace LifeQuest.Api.Storage
         {
             return await _context.Groups.SingleOrDefaultAsync(g => g.InviteCode == inviteCode);
         }
+
+        public async Task AddGroupAsync(GroupStorageModel group)
+        {
+            await _context.Groups.AddAsync(group);
+            await _context.SaveChangesAsync();
+        }
     }
 }

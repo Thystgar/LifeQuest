@@ -8,5 +8,6 @@ namespace LifeQuest.Api.Storage
         Task<GroupStorageModel?> GetGroupByIdAsync(string id);
         Task UpdateGroupAsync(GroupStorageModel group);
         Task<GroupStorageModel?> GetGroupByInviteCodeAsync(string inviteCode);
+        Task AddGroupAsync(GroupStorageModel group);
     }
 }
