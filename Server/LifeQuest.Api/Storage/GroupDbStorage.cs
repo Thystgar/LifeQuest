@@ -30,5 +30,10 @@ namespace LifeQuest.Api.Storage
                     .SetProperty(g => g.Description, group.Description)
                     .SetProperty(g => g.InviteCode, group.InviteCode));
         }
+
+        public async Task<GroupStorageModel?> GetGroupByInviteCodeAsync(string inviteCode)
+        {
+            return await _context.Groups.SingleOrDefaultAsync(g => g.InviteCode == inviteCode);
+        }
     }
 }

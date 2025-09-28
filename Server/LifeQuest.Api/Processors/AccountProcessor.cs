@@ -8,11 +8,13 @@ namespace LifeQuest.Api.Processors
     {
         private readonly IAccountStorage _account;
         private readonly IUserContext _userContext;
+        private readonly IGroupStorage _group;
 
-        public AccountProcessor(IAccountStorage account, IUserContext userContext)
+        public AccountProcessor(IAccountStorage account, IUserContext userContext, IGroupStorage group)
         {
             _account = account;
             _userContext = userContext;
+            _group = group;
         }
 
         public async Task<AccountApiModel?> GetAccountOrCreateAsync()
@@ -38,22 +40,23 @@ namespace LifeQuest.Api.Processors
 
         public async Task AddPointsAsync(string userId, int points)
         {
-            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
             account.Points += points;
             await _account.UpdateAccountAsync(account);
         }
 
         public async Task SpendPointsAsync(string userId, int points)
         {
-            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
             account.Points -= points;
             await _account.UpdateAccountAsync(account);
         }
 
         public async Task JoinGroupAsync(string userId, string inviteCode)
         {
-            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
-            account.GroupId = inviteCode;
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
+            var group = await _group.GetGroupByInviteCodeAsync(inviteCode) ?? throw new NullReferenceException("Group not returned");
+            account.GroupId = group.Id;
             await _account.UpdateAccountAsync(account);
         }
     }

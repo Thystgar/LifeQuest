@@ -37,5 +37,11 @@ namespace LifeQuest.Api.Processors
             var groupStorage = group.ToStorageModel();
             await _groupStorage.UpdateGroupAsync(groupStorage);
         }
+
+        public async Task<GroupApiModel> GetGroupByInviteCodeAsync(string inviteCode)
+        {
+            var group = await _groupStorage.GetGroupByInviteCodeAsync(inviteCode) ?? throw new NullReferenceException("Group not returned");
+            return group.ToApiModel();
+        }
     }
 }
