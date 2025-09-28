@@ -41,7 +41,7 @@ namespace LifeQuest.Api.Processors
         public async Task AddPointsAsync(int points)
         {
             var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
-            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
             account.Points += points;
             await _account.UpdateAccountAsync(account);
         }
@@ -49,13 +49,14 @@ namespace LifeQuest.Api.Processors
         public async Task SpendPointsAsync(int points)
         {
             var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
-            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("User not returned");
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
             account.Points -= points;
             await _account.UpdateAccountAsync(account);
         }
 
         public async Task JoinGroupAsync(string inviteCode)
         {
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
             var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
             var group = await _group.GetGroupByInviteCodeAsync(inviteCode) ?? throw new NullReferenceException("Group not returned");
             account.GroupId = group.Id;
