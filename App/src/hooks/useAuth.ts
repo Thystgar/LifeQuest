@@ -54,59 +54,48 @@ export function useAuth() {
     };
 
     const [request, response, promptAsync] = AuthSession.useAuthRequest(authRequestConfig, discovery);
-    const handleTokenExchange = async () => {
-        if (response?.type === 'success' && response?.params?.code && request?.codeVerifier) {
+    const handleTokenExchange = async (authCodeResult: AuthSession.AuthSessionResult) => {
+        if (authCodeResult?.type === 'success' && authCodeResult?.params?.code && request?.codeVerifier) {
             const body = {
-                code: response.params.code,
+                code: authCodeResult.params.code,
                 grant_type: "authorization_code",
                 client_id: config.clientId,
                 redirect_uri: redirectUri,
                 code_verifier: request?.codeVerifier,
             };
 
-            await fetch("https://cb6668ea-6846-40df-936d-1dbd5deadc52.ciamlogin.com/cb6668ea-6846-40df-936d-1dbd5deadc52/oauth2/v2.0/token", {
+            const accessTokenResponse = await fetch("https://cb6668ea-6846-40df-936d-1dbd5deadc52.ciamlogin.com/cb6668ea-6846-40df-936d-1dbd5deadc52/oauth2/v2.0/token", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
                 body: new URLSearchParams(body).toString(),
-            })
-                .then(async (resp) => await resp.json())
-                .then((resp) => {
-                    console.log("Access Token Response:", resp);
-                    if (resp.access_token) {
-                        setAuth(resp.access_token);
-                        console.log("Access Token set 1:", auth);
-                    } else {
-                        setAuth(null);
-                        console.log("Access Token set 2:", null);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Token exchange error:', error);
-                });
-        };
+            });
+            console.log("Access Token Response:", accessTokenResponse);
+            const json = await accessTokenResponse.json();
+
+            if (json.access_token) {
+                setAuth(json.access_token);
+                console.log("Access Token set 1:", auth);
+            } else {
+                setAuth(null);
+                console.log("Access Token set 2:", null);
+            }
+        }
+        else {
+            console.log("No auth code or code verifier present");
+        }
     }
 
     const signIn = async () => {
         try {
-            await promptAsync()
-            .then(handleTokenExchange)
-            .then(() => {
-                console.log("Authentication successful");
-                console.log("Access Token:", auth);
-            })
+            const result = await promptAsync();
+            await handleTokenExchange(result);
+            console.log("Authentication successful");
         } catch (error) {
             console.error('Authentication error:', error);
-            // setAccessToken(null);
-            // console.log("Access Token set:", accessToken);
         }
     };
-
-    // React.useEffect(() => {
-    //     handleTokenExchange();
-    // }, [response]);
-
 
     const signOut = async () => {
         setAuth(null);

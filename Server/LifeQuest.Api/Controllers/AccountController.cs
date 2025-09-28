@@ -30,15 +30,13 @@ namespace LifeQuest.Api.Controllers
             return Ok(account);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> JoinGroupAsync([FromBody] string inviteCode)
+        [HttpPut("{inviteCode}")]
+        public async Task<ActionResult> JoinGroupAsync(string inviteCode)
         {
             if (string.IsNullOrWhiteSpace(inviteCode))
             {
                 return BadRequest("Invite code cannot be empty.");
             }
-            var userId = _userContext.GetUserId();
-            _logger.LogInformation("User {UserId} joining group {GroupId}", userId, inviteCode);
             await _accountProcessor.JoinGroupAsync(inviteCode);
             var account = await _accountProcessor.GetMyAccountAsync();
             return Ok(account);

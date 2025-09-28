@@ -27,9 +27,11 @@ namespace LifeQuest.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GroupApiModel>>> GetGroupAsync()
         {
-            var userId = _userContext.GetUserId();
-            _logger.LogInformation("Getting all groups for user {UserId}", userId);
-            var group = await _groupProcessor.GetGroupByIdAsync(userId);
+            var account = await _accountProcessor.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
+
+            _logger.LogInformation("Getting group for user {UserId}", account.Id);
+            
+            var group = await _groupProcessor.GetGroupByIdAsync(account.GroupId);
             return Ok(group);
         }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import AddQuestModal from '@/components/AddQuestModal';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Quest, QuestStatus } from '@/api';
 import { useApi } from '@/hooks/useApi';
@@ -90,47 +91,13 @@ export default function QuestsTab() {
             >
               <Text style={styles.fabText}>+</Text>
             </TouchableOpacity>
-            <Modal
-              transparent={true}
+            <AddQuestModal
               visible={modalVisible}
-              onRequestClose={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <TouchableOpacity
-                style={styles.modalOverlay}
-                activeOpacity={1}
-               // onPressOut={() => setModalVisible(false)}
-              >
-                <View style={styles.modalContainer}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalText}>{'Add New Quest'}</Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Name"
-                      value={quest?.name}
-                      onChangeText={name => setQuest(prev => prev ? { ...prev, name } : null)}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Description"
-                      value={quest?.description}
-                      onChangeText={description => setQuest(prev => prev ? { ...prev, description: description } : null)}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Value"
-                      value={quest?.value !== undefined && quest?.value !== 0 ? quest.value.toString() : ''}
-                      onChangeText={points => setQuest(prev => prev ? { ...prev, value: parseInt(points)} : null)}
-                      keyboardType="numeric"
-                    />
-                    <View style={styles.buttonContainer}>
-                      <Button title="Submit" onPress={handleAddQuest} />
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </Modal>
+              quest={quest}
+              setQuest={setQuest}
+              onSubmit={handleAddQuest}
+              onClose={() => setModalVisible(false)}
+            />
     </View>
   );
 }

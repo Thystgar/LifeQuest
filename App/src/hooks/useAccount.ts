@@ -22,10 +22,6 @@ export function useAccount() {
         }
     };
 
-    const onPointChange = () => {
-        loadAccount();
-    }
-
     React.useEffect(() => {
         if (!isUserAuthenticated) {
             setAccount(null);
@@ -36,5 +32,10 @@ export function useAccount() {
         }
     }, [isUserAuthenticated]);
 
-    return { account, onPointChange, isMemberOfGroup: account?.groupId != null && account?.groupId !== '' };
+    return { 
+        account,
+        onPointChange: async () => await loadAccount(),
+        isMemberOfGroup: account?.groupId != null && account?.groupId !== '',
+        onGroupJoin: async () => await loadAccount()
+    };
 }

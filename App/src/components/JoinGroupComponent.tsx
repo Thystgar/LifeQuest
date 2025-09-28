@@ -4,22 +4,26 @@ import { Colors } from '@/constants/Colors';
 import CreateGroupForm from '@/components/CreateGroupForm';
 import { useApi } from '@/hooks/useApi';
 import { NewGroup } from '@/api';
+import { useAccount } from '@/hooks/useAccount';
 
 const JoinGroupComponent: React.FC = () => {
   const [inviteCode, setInviteCode] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const { joinGroup, createGroup } = useApi();
+  const { onGroupJoin, account } = useAccount();
 
-  const handleJoinGroup = () => {
-    joinGroup(inviteCode);
+  const handleJoinGroup = async () => {
+    await joinGroup(inviteCode);
+    await onGroupJoin();
   };
 
   const handleCreateGroup = () => {
     setShowCreateForm(true);
   };
 
-  const handleCreateGroupSubmit = (name: string, description: string) => {
-    createGroup(new NewGroup(name, description));
+  const handleCreateGroupSubmit = async (name: string, description: string) => {
+    await createGroup(new NewGroup(name, description));
+    await onGroupJoin();
     setShowCreateForm(false);
   };
 
@@ -33,6 +37,7 @@ const JoinGroupComponent: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.label}>Welcome {account?.name}</Text>
       <View style={styles.section}>
         <Text style={styles.label}>Join group by token:</Text>
         <TextInput

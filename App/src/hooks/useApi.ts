@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks//useAuth';
 import { Account, Quest, Reward } from '@/api';
-import { NewGroup } from '@/api/models/Group';
+import { Group, NewGroup } from '@/api/models/Group';
   // ...existing code...
   // ...existing code...
   // ...existing code...
@@ -37,7 +37,9 @@ export function useApi() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status} on ${method}: ${url}`);
       }
-      return await response.json();
+      const result = await response.json();
+      console.log(`Response from ${method} ${url}:`, result);
+      return result;
     }
     catch (error) {
       console.error(`Error sending request ${method}: ${url}`, error);
@@ -77,12 +79,16 @@ export function useApi() {
     return await sendRequestAsync('/account', 'GET');
   };
 
+  const fetchGroup = async (): Promise<Group> => {
+    return await sendRequestAsync('/group', 'GET');
+  };
+
   const createGroup = async (newGroup: NewGroup): Promise<void> => {
     await sendRequestAsync('/group', 'POST', newGroup);
   };
 
   const joinGroup = async (inviteCode: string): Promise<void> => {
-    await sendRequestAsync(`/account?inviteCode=${inviteCode}`, 'POST');
+    await sendRequestAsync(`/account/${inviteCode}`, 'PUT');
   };
 
   return {
@@ -94,6 +100,7 @@ export function useApi() {
     addReward,
     deleteReward,
     fetchAccount,
+    fetchGroup,
     createGroup,
     joinGroup,
   };
