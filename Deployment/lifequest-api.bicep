@@ -56,10 +56,6 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-previ
           ports: [
             {
               protocol: 'TCP'
-              port: 8080
-            }
-            {
-              protocol: 'TCP'
               port: 8443
             }
           ]
