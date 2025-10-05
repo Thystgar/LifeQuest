@@ -111,19 +111,41 @@ namespace LifeQuest.Api
                 .UseKestrel((context, options) =>
                 {
                     var kvUri = context.Configuration.GetValue<string>("KeyVault:Url");
-                    if (!string.IsNullOrEmpty(kvUri))
+                    var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                    var logger = loggerFactory.CreateLogger<Program>();
+
+                    if (string.IsNullOrEmpty(kvUri))
+                    {
+                        logger.LogWarning("Key Vault URL is not configured. HTTPS with certificate from Key Vault will not be enabled.");
+                        return;
+                    }
+
+                    logger.LogInformation("Attempting to retrieve TLS certificate from Key Vault at {KeyVaultUrl}", kvUri);
+                    try
                     {
                         var secretClient = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
                         var certSecret = secretClient.GetSecret("lifequestwebsite-tls");
-                        if (certSecret?.Value?.Value != null)
+                        
+                        if (certSecret?.Value?.Value == null)
                         {
-                            var certBytes = Convert.FromBase64String(certSecret?.Value?.Value.ToString());
+                            logger.LogError("TLS certificate secret 'lifequestwebsite-tls' not found in Key Vault or has no value");
+                            return;
+                        }
+
+                        var certBytes = Convert.FromBase64String(certSecret.Value.Value.ToString());
                             var certificate = X509CertificateLoader.LoadPkcs12(certBytes, null);
+                        
+                        logger.LogInformation("Successfully loaded TLS certificate from Key Vault. Configuring HTTPS endpoint.");
                             options.ListenAnyIP(443, listenOptions =>
                             {
                                 listenOptions.UseHttps(certificate);
                             });
+                        logger.LogInformation("HTTPS endpoint configured successfully on port 443");
                         }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to configure HTTPS endpoint with certificate from Key Vault");
+                        throw; // Re-throw the exception to prevent startup with invalid certificate
                     }
                 });
             return builder;
