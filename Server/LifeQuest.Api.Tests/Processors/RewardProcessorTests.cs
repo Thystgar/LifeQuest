@@ -36,7 +36,7 @@ namespace LifeQuest.Api.Tests.Processors
         [Fact]
         public async Task AddRewardAsync_CallsStorageAdd()
         {
-            var reward = new RewardApiModel { Id = "1", Name = "Reward", Description = "Description", Redeemed = false, Value = 100, GroupId = "group" };
+            var reward = new NewRewardApiModel {Name = "Reward", Description = "Description", Value = 100 };
 
             await _rewardProcessor.AddRewardAsync(reward);
 
