@@ -99,6 +99,7 @@ namespace LifeQuest.Api
 
                     app.UseHttpsRedirection();
                     app.UseRouting();
+                    app.UseStaticFiles(); // Add this line to enable static file serving
 
                     app.UseAuthentication();
                     app.UseAuthorization();
@@ -106,6 +107,14 @@ namespace LifeQuest.Api
                     app.UseEndpoints(endpoints =>
                     {
                         endpoints.MapControllers();
+                        endpoints.MapGet("/privacy", async context =>
+                        {
+                            await context.Response.SendFileAsync("wwwroot/privacy.html");
+                        });
+                        endpoints.MapGet("/eula", async context =>
+                        {
+                            await context.Response.SendFileAsync("wwwroot/eula.html");
+                        });
                     });
                 })
                 .UseKestrel((context, options) =>

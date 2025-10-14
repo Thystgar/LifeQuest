@@ -11,14 +11,19 @@ export function useAccount() {
     const { account, setAccount } = useAccountContext();
     const { isUserAuthenticated } = useAuth();
     const { fetchAccount } = useApi();
+    const loadingRef = React.useRef(false);
 
     const loadAccount = async () => {
+        if (loadingRef.current) return;
         try {
+            loadingRef.current = true;
             const accountData = await fetchAccount();
             setAccount(accountData);
             console.log('Account data:', accountData);
         } catch (error) {
             console.error('Failed to fetch account data:', error);
+        } finally {
+            loadingRef.current = false;
         }
     };
 
