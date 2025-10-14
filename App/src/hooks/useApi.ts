@@ -4,7 +4,7 @@ import { Group, NewGroup } from '@/api/models/Group';
 
 export function useApi() {
   //const BASE_URI = 'http://10.0.2.2:8080';
-  const BASE_URI = "https://www.lifequest.website:8443";
+  const BASE_URI = "https://www.lifequest.website:443";
 
   const { auth, isUserAuthenticated } = useAuth();
   

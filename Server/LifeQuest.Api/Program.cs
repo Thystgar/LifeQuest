@@ -145,7 +145,7 @@ namespace LifeQuest.Api
                             var certificate = X509CertificateLoader.LoadPkcs12(certBytes, null);
                         
                         logger.LogInformation("Successfully loaded TLS certificate from Key Vault. Configuring HTTPS endpoint.");
-                        options.ListenAnyIP(8443, listenOptions =>
+                        options.ListenAnyIP(443, listenOptions =>
                             {
                                 listenOptions.UseHttps(certificate);
                             });
