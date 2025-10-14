@@ -115,7 +115,11 @@ namespace LifeQuest.Api
                         {
                             await context.Response.SendFileAsync("wwwroot/eula.html");
                         });
-                    });
+                        endpoints.MapGet("/delete-account", async context =>
+                        {
+                            await context.Response.SendFileAsync("wwwroot/delete-account.html");
+                        });
+                });
                 })
                 .UseKestrel((context, options) =>
                 {
