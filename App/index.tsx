@@ -30,5 +30,5 @@ if (Constants.executionEnvironment == 'storeClient') {
   registerRootComponent(AppWithContext);
 } else {
   console.log('Running in native build');
-  AppRegistry.registerComponent('lifequest', () => AppWithContext);
+  AppRegistry.registerComponent('lifequestapp', () => AppWithContext);
 }

@@ -24,7 +24,7 @@ export function useAuth() {
     const config = {
         issuer: 'https://cb6668ea-6846-40df-936d-1dbd5deadc52.ciamlogin.com/cb6668ea-6846-40df-936d-1dbd5deadc52/v2.0',
         clientId: '8c14ca47-92da-4673-a63b-1cf4f9c40653',
-        redirectUrl: 'com.lifequest://auth',  // react-native
+        redirectUrl: 'com.lifequestapp://auth',  // react-native
         //redirectUrl: 'exp://localhost:8081', // web
         scopes: ['openid', 'profile', 'email', 'offline_access', 'api://5a4e418f-36f4-4546-9983-0f76427232d6/User'],
         serviceConfiguration: {

@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "lifequest",
-    "slug": "lifequest",
+    "name": "lifequestapp",
+    "slug": "lifequestapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/assets/images/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "scheme": "com.lifequest",
+    "scheme": "com.lifequestapp",
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "package": "com.anonymous.LifeQuest"
+      "package": "com.lifequestapp"
     },
     "plugins": [
       "expo-asset",
@@ -20,7 +20,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
-          "image": "src/assets/images/splash-icon.png"
+          "image": "src/assets/images/icon.png"
         }
       ]
     ]
