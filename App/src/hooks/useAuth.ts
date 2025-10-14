@@ -9,18 +9,6 @@ import { useAuthContext } from '@/contexts/AuthContext';
 export function useAuth() {
     const { auth, setAuth } = useAuthContext();
 
-    //     useEffect(() => {
-    //         const logger = setInterval(() => {
-    //             console.log('Current access token:', accessToken);
-    //         }, 1000);
-    //         return () => clearInterval(logger); // Cleanup on unmount
-    //     }, [accessToken]);
-
-    //     useEffect(() => {
-    //   console.log('useAuth mounted');
-    // }, []);
-
-
     const config = {
         issuer: 'https://cb6668ea-6846-40df-936d-1dbd5deadc52.ciamlogin.com/cb6668ea-6846-40df-936d-1dbd5deadc52/v2.0',
         clientId: '8c14ca47-92da-4673-a63b-1cf4f9c40653',
