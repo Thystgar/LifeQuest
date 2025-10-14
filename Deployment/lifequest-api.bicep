@@ -56,7 +56,7 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-previ
           ports: [
             {
               protocol: 'TCP'
-              port: 443
+              port: 8443
             }
           ]
           resources: {
@@ -84,7 +84,7 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2024-10-01-previ
       ports: [
         {
           protocol: 'TCP'
-          port: 443
+          port: 8443
         }
       ]
       type: 'Public'
