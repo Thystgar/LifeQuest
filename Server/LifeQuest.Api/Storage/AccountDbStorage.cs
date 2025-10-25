@@ -24,7 +24,8 @@ namespace LifeQuest.Api.Storage
                 .ExecuteUpdateAsync(a => a
                     .SetProperty(a => a.Name, account.Name)
                     .SetProperty(a => a.Points, account.Points)
-                    .SetProperty(a => a.GroupId, account.GroupId));
+                    .SetProperty(a => a.GroupId, account.GroupId)
+                    .SetProperty(a => a.TermsAccepted, account.TermsAccepted));
         }
 
         public async Task CreateNewAccount(string userId, string userName)
