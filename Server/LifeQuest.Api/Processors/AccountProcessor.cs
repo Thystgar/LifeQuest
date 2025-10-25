@@ -62,5 +62,24 @@ namespace LifeQuest.Api.Processors
             account.GroupId = group.Id;
             await _account.UpdateAccountAsync(account);
         }
+
+        public async Task LeaveGroupAsync()
+        {
+            // nemame na to metodu GetMyAccount nebo tak neco?
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
+            account.GroupId = ""; //string.Empty
+            // chceme grupu vymazat kdyz je prazdna?
+            await _account.UpdateAccountAsync(account);
+        }
+
+        public async Task DeleteAccountAsync()
+        {
+            // nemame na to metodu GetMyAccount
+            var userId = _userContext.GetUserId() ?? throw new NullReferenceException("UserId not found in context");
+            var account = await _account.GetAccountByIdAsync(userId) ?? throw new NullReferenceException("Account not returned");
+            await _account.DeleteAccountAsync(account.Id);
+            // todo vymazat to i v Microsoft entra id
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace LifeQuest.Api.Processors
         Task AddPointsAsync(int points);
         Task SpendPointsAsync(int points);
         Task JoinGroupAsync(string inviteCode);
+        Task LeaveGroupAsync();
+        Task DeleteAccountAsync();
     }
 }

@@ -39,5 +39,10 @@ namespace LifeQuest.Api.Storage
             _context.Accounts.Add(newAccount);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteAccountAsync(string accountId)
+        {
+            await _context.Accounts.Where(a => a.Id == accountId).ExecuteDeleteAsync();
+        }
     }
 }

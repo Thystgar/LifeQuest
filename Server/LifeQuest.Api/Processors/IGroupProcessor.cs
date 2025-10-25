@@ -8,5 +8,6 @@ namespace LifeQuest.Api.Processors
         Task<string> AddGroupAsync(NewGroupApiModel group);
         Task UpdateGroupAsync(GroupApiModel group);
         Task<GroupApiModel> GetGroupByInviteCodeAsync(string inviteCode);
+        Task DeleteGroupAsync(string groupId);
     }
 }

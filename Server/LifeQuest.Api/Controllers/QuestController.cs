@@ -14,12 +14,14 @@ namespace LifeQuest.Api.Controllers
         private readonly IQuestProcessor _questProcessor;
         private readonly ILogger<QuestController> _logger;
         private readonly IUserContext _userContext;
+        private readonly IAccountProcessor _accountProcessor;
 
-        public QuestController(IQuestProcessor questProcessor, ILogger<QuestController> logger, IUserContext userContext)
+        public QuestController(IQuestProcessor questProcessor, ILogger<QuestController> logger, IUserContext userContext, IAccountProcessor accountProcessor)
         {
             _questProcessor = questProcessor;
             _logger = logger;
             _userContext = userContext;
+            _accountProcessor = accountProcessor;
         }
 
         [HttpGet]
@@ -64,6 +66,25 @@ namespace LifeQuest.Api.Controllers
 
             await _questProcessor.AddQuestAsync(quest);
             return Ok(quest);
+        }
+
+        [HttpDelete("{questId}")]
+        public async Task<ActionResult> DeleteQuestAsync(string questId)
+        {
+            if (string.IsNullOrWhiteSpace(questId))
+            {
+                return BadRequest("Quest ID cannot be empty.");
+            }
+
+            var quest = await _questProcessor.GetQuestByIdAsync(questId) ?? throw new NullReferenceException("");
+            var account = await _accountProcessor.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
+            if (quest == null || quest.GroupId != account.GroupId)
+            {
+                return Forbid("You can only delete quests in your own group.");
+            }
+
+            await _questProcessor.DeleteQuestAsync(questId);
+            return NoContent();
         }
     }
 }

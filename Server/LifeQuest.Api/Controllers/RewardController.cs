@@ -13,11 +13,13 @@ namespace LifeQuest.Api.Controllers
     {
         private readonly IRewardProcessor _rewardProcessor;
         private readonly IUserContext _userContext;
+        private readonly IAccountProcessor _accountProcessor;
 
-        public RewardController(IRewardProcessor rewardProcessor, IUserContext userContext)
+        public RewardController(IRewardProcessor rewardProcessor, IUserContext userContext, IAccountProcessor accountProcessor)
         {
             _rewardProcessor = rewardProcessor;
             _userContext = userContext;
+            _accountProcessor = accountProcessor;
         }
 
         [HttpGet]
@@ -71,6 +73,14 @@ namespace LifeQuest.Api.Controllers
             {
                 return BadRequest("Reward ID cannot be empty.");
             }
+
+            var reward = await _rewardProcessor.GetRewardByIdAsync(rewardId) ?? throw new NullReferenceException("Reward not returned");
+            var account = await _accountProcessor.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
+            if (reward == null || reward.GroupId != account.GroupId)
+            {
+                return Forbid("You can only delete rewards in your own group.");
+            }
+
             await _rewardProcessor.DeleteRewardAsync(rewardId);
             return NoContent();
         }

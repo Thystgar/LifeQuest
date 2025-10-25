@@ -47,5 +47,16 @@ namespace LifeQuest.Api.Processors
 
             await _storage.AddQuestAsync(storageQuest);
         }
+
+        public async Task DeleteQuestAsync(string questId)
+        {
+            await _storage.DeleteQuestAsync(questId);
+        }
+
+        public async Task<QuestApiModel> GetQuestByIdAsync(string questId)
+        {
+            var quest = await _storage.GetQuestByIdAsync(questId) ?? throw new NullReferenceException("Quest not found.");
+            return quest.ToApiModel();
+        }
     }
 }

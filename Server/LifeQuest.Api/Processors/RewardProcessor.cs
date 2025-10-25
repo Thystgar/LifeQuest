@@ -58,5 +58,11 @@ namespace LifeQuest.Api.Processors
         {
             await _storage.DeleteRewardAsync(rewardId);
         }
+
+        public async Task<RewardApiModel> GetRewardByIdAsync(string rewardId)
+        {
+            var reward = await _storage.GetRewardByIdAsync(rewardId) ?? throw new NullReferenceException("Reward not found.");
+            return reward.ToApiModel();
+        }
     }
 }

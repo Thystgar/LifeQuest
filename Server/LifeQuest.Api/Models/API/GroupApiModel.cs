@@ -1,4 +1,6 @@
-﻿namespace LifeQuest.Api.Models.API
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LifeQuest.Api.Models.API
 {
     public class GroupApiModel
     {

@@ -85,5 +85,25 @@ namespace LifeQuest.Api.Controllers
             var newGroup = await _groupProcessor.GetGroupByIdAsync(group.Id);
             return Ok(newGroup);
         }
+
+        [HttpDelete("{groupId}")]
+        public async Task<ActionResult> DeleteGroupAsync(string groupId)
+        {
+            if (string.IsNullOrWhiteSpace(groupId))
+            {
+                return BadRequest("Group ID cannot be empty.");
+            }
+
+            var account = await _accountProcessor.GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
+            if (account.GroupId != groupId)
+            {
+                // we can take the group id form context and not allow it as parameter
+                return Forbid("You can only delete your own group.");
+            }
+            //delete qsts and rewards
+            await _accountProcessor.LeaveGroupAsync();
+            await _groupProcessor.DeleteGroupAsync(groupId);
+            return NoContent();
+        }
     }
 }

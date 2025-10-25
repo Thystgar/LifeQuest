@@ -41,5 +41,15 @@ namespace LifeQuest.Api.Storage
             await _context.Groups.AddAsync(group);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteGroupAsync(string groupId)
+        {
+            await _context.Groups.Where(g => g.Id == groupId).ExecuteDeleteAsync();
+        }
+
+        public async Task<IEnumerable<AccountStorageModel>> GetGroupMembersAsync(string groupId)
+        {
+            return await _context.Accounts.Where(a => a.GroupId == groupId).ToListAsync();
+        }
     }
 }
