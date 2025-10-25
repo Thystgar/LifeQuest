@@ -41,6 +41,7 @@ export function useAccount() {
         account,
         onPointChange: async () => await loadAccount(),
         isMemberOfGroup: account?.groupId != null && account?.groupId !== '',
-        onGroupJoin: async () => await loadAccount()
+        onGroupJoin: async () => await loadAccount(),
+        termsAccepted: account?.termsAccepted || false
     };
 }

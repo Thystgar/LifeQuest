@@ -11,6 +11,7 @@ import RewardsTab from '@/navigation/screens/Reward';
 import AccountHeader from '@/components/AccountHeader';
 import JoinGroupComponent from '@/components/JoinGroupComponent';
 import SignInComponent from '@/components/SignInComponent';
+import TermsAndConditionsComponent from '@/components/TermsAndConditions';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useAccount } from './hooks/useAccount';
@@ -22,7 +23,7 @@ const Tab = createBottomTabNavigator();
 
 export function App(): React.JSX.Element {
   const { signIn, isUserAuthenticated } = useAuth();
-  const { isMemberOfGroup } = useAccount();
+  const { isMemberOfGroup, termsAccepted } = useAccount();
 
   return (
     <NavigationContainer>
@@ -32,11 +33,14 @@ export function App(): React.JSX.Element {
         !isMemberOfGroup ? (
           <JoinGroupComponent/>
         ) : (
-        <>
-          <AccountHeader />
-          <Tab.Navigator>
-            <Tab.Screen
-              name="Quests"
+          !termsAccepted ? (
+            <TermsAndConditionsComponent />
+          ) : (
+            <>
+              <AccountHeader />
+              <Tab.Navigator>
+                <Tab.Screen
+                  name="Quests"
               component={QuestsTab}
               options={{
                 headerShown: false,
@@ -63,7 +67,7 @@ export function App(): React.JSX.Element {
             />
           </Tab.Navigator>
         </>
-      ))}
+      )))}
     </NavigationContainer>
   );
 }

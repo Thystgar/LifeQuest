@@ -25,7 +25,7 @@ namespace LifeQuest.Api.Tests.Processors
         {
             var rewards = new List<RewardApiModel> { new RewardApiModel { Id = "1", Name = "Reward", Description="Description", Redeemed=false, Value=100, GroupId = "group" } };
             _mockStorage.Setup(s => s.GetRewardsAsync()).ReturnsAsync(rewards.Select(r => r.ToStorageModel()));
-            _mockAccountProcessor.Setup(a => a.GetMyAccountAsync()).ReturnsAsync(new AccountApiModel { Id = "user", Name = "Test User", Points = 200, GroupId = "group" });
+            _mockAccountProcessor.Setup(a => a.GetMyAccountAsync()).ReturnsAsync(new AccountApiModel { Id = "user", Name = "Test User", Points = 200, GroupId = "group", TermsAccepted = true });
 
             var result = await _rewardProcessor.GetRewardsAsync();
 
@@ -38,7 +38,7 @@ namespace LifeQuest.Api.Tests.Processors
         public async Task AddRewardAsync_CallsStorageAdd()
         {
             var reward = new NewRewardApiModel {Name = "Reward", Description = "Description", Value = 100 };
-            _mockAccountProcessor.Setup(a => a.GetMyAccountAsync()).ReturnsAsync(new AccountApiModel { Id = "user", Name = "Test User", Points = 200, GroupId = "group" });
+            _mockAccountProcessor.Setup(a => a.GetMyAccountAsync()).ReturnsAsync(new AccountApiModel { Id = "user", Name = "Test User", Points = 200, GroupId = "group", TermsAccepted = true });
 
             await _rewardProcessor.AddRewardAsync(reward);
 
@@ -50,7 +50,7 @@ namespace LifeQuest.Api.Tests.Processors
         {
             var reward = new RewardStorageModel { Id = "1", Name = "Reward", Description = "Description", Redeemed = false, Value = 100, GroupId = "group" };
             _mockStorage.Setup(s => s.GetRewardByIdAsync("1")).ReturnsAsync(reward);
-            _mockAccountProcessor.Setup(a => a.GetMyAccountAsync()).ReturnsAsync(new AccountApiModel { Id = "user", Name = "Test User", Points = 200, GroupId = "group" });
+            _mockAccountProcessor.Setup(a => a.GetMyAccountAsync()).ReturnsAsync(new AccountApiModel { Id = "user", Name = "Test User", Points = 200, GroupId = "group", TermsAccepted = true });
 
             var result = await _rewardProcessor.RedeemRewardAsync("user", "1");
 

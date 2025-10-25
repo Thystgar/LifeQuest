@@ -24,7 +24,7 @@ namespace LifeQuest.Api.Tests.Processors
         [Fact]
         public async Task GetAccountAsync_ReturnsAccount()
         {
-            var account = new AccountApiModel { Id = "1", Name = "Test Account", Points = 100, GroupId = "group" };
+            var account = new AccountApiModel { Id = "1", Name = "Test Account", Points = 100, GroupId = "group", TermsAccepted = false };
             _mockStorage.Setup(s => s.GetAccountByIdAsync("1")).ReturnsAsync(account.ToStorageModel());
             _mockUserContext.Setup(uc => uc.GetUserId()).Returns("1");
 

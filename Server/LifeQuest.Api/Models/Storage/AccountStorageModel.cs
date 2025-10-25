@@ -9,5 +9,6 @@ namespace LifeQuest.Api.Models.Storage
         public required string Name { get; set; }
         public required int Points { get; set; }
         public required string GroupId { get; set; }
+        public bool TermsAccepted { get; set; }
     }
 }

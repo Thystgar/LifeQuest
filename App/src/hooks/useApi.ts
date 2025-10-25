@@ -74,6 +74,14 @@ export function useApi() {
     return await sendRequestAsync('/account', 'GET');
   };
 
+  const deleteAccount = async (): Promise<void> => {
+    await sendRequestAsync(`/account`, 'DELETE');
+  };
+
+  const updateAccount = async (termsAccepted: boolean): Promise<void> => {
+    await sendRequestAsync(`/account`, 'PUT', { termsAccepted });
+  };
+
   const fetchGroup = async (): Promise<Group> => {
     return await sendRequestAsync('/group', 'GET');
   };
@@ -95,6 +103,8 @@ export function useApi() {
     addReward,
     deleteReward,
     fetchAccount,
+    deleteAccount,
+    updateAccount,
     fetchGroup,
     createGroup,
     joinGroup,

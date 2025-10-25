@@ -14,7 +14,7 @@ interface SettingsMenuProps {
 
 const SettingsMenu: React.FC<SettingsMenuProps> = ({ visible, initials, account, onClose, onSignOut, onSettings }) => {
   const [group, setGroup] = React.useState<Group | null>(null);
-  const {fetchGroup} = useApi();
+  const {fetchGroup, deleteAccount} = useApi();
 
   React.useEffect(() => {
     const loadGroup = async () => {
@@ -50,6 +50,9 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ visible, initials, account,
         </TouchableOpacity>
         <View style={styles.menuItem}>
           <Button title="Sign out" onPress={onSignOut} />
+        </View>
+        <View style={styles.menuItem}>
+          <Button title="Delete Account" onPress={deleteAccount} />
         </View>
       </View>
     </View>
