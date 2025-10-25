@@ -49,5 +49,13 @@ namespace LifeQuest.Api.Controllers
             await _accountProcessor.DeleteAccountAsync();
             return NoContent();
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateAccount([FromBody] UpdateAccountApiModel updateAccount)
+        {
+            await _accountProcessor.UpdateAccountAsync(updateAccount);
+            var account = await _accountProcessor.GetMyAccountAsync();
+            return Ok(account);
+        }
     }
 }

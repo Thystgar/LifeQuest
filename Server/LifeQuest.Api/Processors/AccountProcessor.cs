@@ -81,5 +81,12 @@ namespace LifeQuest.Api.Processors
             await _account.DeleteAccountAsync(account.Id);
             // todo vymazat to i v Microsoft entra id
         }
+
+        public async Task UpdateAccountAsync(UpdateAccountApiModel updateAccount)
+        {
+            var account = await GetMyAccountAsync() ?? throw new NullReferenceException("Account not returned");
+            account.TermsAccepted = updateAccount.TermsAccepted;
+            await _account.UpdateAccountAsync(account.ToStorageModel());
+        }
     }
 }

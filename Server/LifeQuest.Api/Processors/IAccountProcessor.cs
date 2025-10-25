@@ -11,5 +11,6 @@ namespace LifeQuest.Api.Processors
         Task JoinGroupAsync(string inviteCode);
         Task LeaveGroupAsync();
         Task DeleteAccountAsync();
+        Task UpdateAccountAsync(UpdateAccountApiModel updateAccount);
     }
 }
