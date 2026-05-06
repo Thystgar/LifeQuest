@@ -12,6 +12,7 @@ import AccountHeader from '@/components/AccountHeader';
 import JoinGroupComponent from '@/components/JoinGroupComponent';
 import SignInComponent from '@/components/SignInComponent';
 import TermsAndConditionsComponent from '@/components/TermsAndConditions';
+import LoadingComponent from '@/components/LoadingComponent';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useAccount } from './hooks/useAccount';
@@ -23,12 +24,14 @@ const Tab = createBottomTabNavigator();
 
 export function App(): React.JSX.Element {
   const { signIn, isUserAuthenticated } = useAuth();
-  const { isMemberOfGroup, termsAccepted } = useAccount();
+  const { isMemberOfGroup, termsAccepted, isAccountLoading } = useAccount();
 
   return (
     <NavigationContainer>
       {!isUserAuthenticated ? (
         <SignInComponent/>
+      ) : isAccountLoading ? (
+        <LoadingComponent/>
       ) : (
         !isMemberOfGroup ? (
           <JoinGroupComponent/>
